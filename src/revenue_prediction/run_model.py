@@ -1,0 +1,1 @@
+""" Takes an IMDb link and uses the model to predict revenue """

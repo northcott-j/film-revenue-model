@@ -1,0 +1,1 @@
+""" Class to handle a Queue for multiprocessing and a set of seen items to avoid repeat processes """

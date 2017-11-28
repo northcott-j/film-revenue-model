@@ -1,0 +1,1 @@
+""" Contains config variables such as MongoDB URL """

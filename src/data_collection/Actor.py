@@ -1,0 +1,1 @@
+""" Class for an Actor (also Director) """
