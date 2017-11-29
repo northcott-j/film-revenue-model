@@ -1,1 +1,0 @@
-""" Class to interact with Box Office Mojo's site (may not be needed) """

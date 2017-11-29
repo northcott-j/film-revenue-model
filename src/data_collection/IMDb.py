@@ -1,1 +1,0 @@
-""" Class used to scrape from IMDb (may not be needed) """
