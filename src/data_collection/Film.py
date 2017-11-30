@@ -469,17 +469,22 @@ class Film:
         :param func: a function that takes an Actor id and returns a numerical field
         :return: {sum: int, min: int, max: int, avg: int}
         """
+        length = len(self.actors)
         sum_stat = 0
         max_stat = 0
         min_stat = 0
         for actor_id in self.actors:
             val = func(actor_id)
+            # If the actor doesn't have a value, subtract from length and skip
+            if not val:
+                length -= 1
+                continue
             sum_stat += val
             if val > max_stat:
                 max_stat = val
             if val < min_stat:
                 min_stat = val
-        return {"sum": sum_stat, "max": max_stat, "min": min_stat, "avg": sum_stat / len(self.actors)}
+        return {"sum": sum_stat, "max": max_stat, "min": min_stat, "avg": sum_stat / length}
 
     def set_aggregate_fields(self):
         """
