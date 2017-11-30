@@ -461,7 +461,7 @@ class Film:
         :param actor_id: string id of an actor
         :return: an Actor
         """
-        return Actor.all_actors.get(actor_id)
+        return Actor.all_actors.get(actor_id, Actor('NonsenseId', False))
 
     def get_actor_stats(self, func):
         """
