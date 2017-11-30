@@ -141,7 +141,7 @@ class Actor:
         :param film_id: string id of a film
         :return: a Film
         """
-        return Film.all_films.get(film_id)
+        return Film.all_films.get(film_id, Film('NonsenseFilmId', 'No Title', '3000'))
 
     def sort_films(self):
         """
@@ -204,7 +204,7 @@ class Actor:
         :param f_id: the id for the film
         :return: int
         """
-        return self.get_film(f_id).release_date.year - self.birthday
+        return self.get_film(f_id).get_release_date().year - self.birthday
 
     def get_num_appearances_before(self, f_id):
         """
@@ -226,7 +226,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_average_before(lambda fid: self.get_film(fid).revenue, f_id)
+        return self.get_film_average_before(lambda fid: self.get_film(fid).get_revenue(), f_id)
 
     def get_max_film_revenue_before(self, f_id):
         """
@@ -235,7 +235,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_max_before(lambda fid: self.get_film(fid).revenue, f_id)
+        return self.get_film_max_before(lambda fid: self.get_film(fid).get_revenue(), f_id)
 
     def get_avg_film_stars_before(self, f_id):
         """
@@ -244,7 +244,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_average_before(lambda fid: self.get_film(fid).stars, f_id)
+        return self.get_film_average_before(lambda fid: self.get_film(fid).get_stars(), f_id)
 
     def get_max_film_stars_before(self, f_id):
         """
@@ -253,7 +253,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_max_before(lambda fid: self.get_film(fid).stars, f_id)
+        return self.get_film_max_before(lambda fid: self.get_film(fid).get_stars(), f_id)
 
     def get_avg_film_metascore_before(self, f_id):
         """
@@ -262,7 +262,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_average_before(lambda fid: self.get_film(fid).metascore, f_id)
+        return self.get_film_average_before(lambda fid: self.get_film(fid).get_metascore(), f_id)
 
     def get_max_film_metascore_before(self, f_id):
         """
@@ -271,7 +271,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_max_before(lambda fid: self.get_film(fid).metascore, f_id)
+        return self.get_film_max_before(lambda fid: self.get_film(fid).get_metascore(), f_id)
 
     def get_avg_film_votes_before(self, f_id):
         """
@@ -280,7 +280,7 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_average_before(lambda fid: self.get_film(fid).num_votes, f_id)
+        return self.get_film_average_before(lambda fid: self.get_film(fid).get_num_votes(), f_id)
 
     def get_max_film_votes_before(self, f_id):
         """
@@ -289,4 +289,4 @@ class Actor:
         :mutate films: sorts if needed
         :return: int
         """
-        return self.get_film_max_before(lambda fid: self.get_film(fid).num_votes, f_id)
+        return self.get_film_max_before(lambda fid: self.get_film(fid).get_num_votes(), f_id)

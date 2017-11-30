@@ -453,6 +453,56 @@ class Film:
             self.revenue = self.handle_error('revenue')
         return self.revenue
 
+    def get_release_date(self):
+        """
+        Gets the release date
+        :mutate release_date: if the field doesn't exist
+        :return: datetime
+        """
+        if not self.release_date:
+            self.release_date = self.handle_error("release_date")
+        return self.release_date
+
+    def get_revenue(self):
+        """
+        Gets the revenue
+        :mutate revenue: if the field doesn't exist
+        :return: int
+        """
+        if not self.revenue:
+            self.revenue = self.handle_error("revenue")
+        return self.revenue
+
+    def get_stars(self):
+        """
+        Gets the stars
+        :mutate stars: if the field doesn't exist
+        :return: float
+        """
+        if not self.stars:
+            self.stars = self.handle_error("stars")
+        return self.stars
+
+    def get_metascore(self):
+        """
+        Gets the metascore
+        :mutate metascore: if the field doesn't exist
+        :return: int
+        """
+        if not self.metascore:
+            self.metascore = self.handle_error("metascore")
+        return self.metascore
+
+    def get_num_votes(self):
+        """
+        Gets the num_votes
+        :mutate num_votes: if the field doesn't exist
+        :return: int
+        """
+        if not self.num_votes:
+            self.num_votes = self.handle_error("num_votes")
+        return self.num_votes
+
     ## AGGREGATE METHODS
     @staticmethod
     def get_actor(actor_id):
