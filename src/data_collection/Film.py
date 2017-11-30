@@ -13,7 +13,6 @@ class Film:
     all_films = dict()
 
     def __init__(self, mojo_id, mojo_title, mojo_year):
-        # TODO :: Need to convert these numbers back to null defaults
         # If anything critical fails during the scrape process
         self.FAILED = False
         # The ID of the movie on Box Office Mojo                            !important
@@ -25,9 +24,9 @@ class Film:
         # The ID of the movie on IMDb (will be used as primary id)          !important
         self.id = ''
         # HTML of the IMDb page                                             !important
-        self.imdb_page = BeautifulSoup("", "html.parser")
+        self.imdb_page = None
         # HTML of the Box Office Mojo Page                                  !important
-        self.mojo_page = BeautifulSoup("", "html.parser")
+        self.mojo_page = None
         # The number of stars the film had outta 10
         self.stars = 0.0
         # The metascore outta 100
@@ -37,11 +36,11 @@ class Film:
         # Film length in number of minutes
         self.length = 0
         # MPAA rating e.g. PG-13
-        self.mpaa = 'None'
+        self.mpaa = None
         # Budget for the movie
         self.budget = 0
         # Datetime of film release in order to sort films                  !important
-        self.release_date = datetime.datetime(3000,1,1)
+        self.release_date = None
         # Number of the month (1-12)
         self.month = 0
         # Day of the month (1-31)
