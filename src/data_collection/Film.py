@@ -467,7 +467,7 @@ class Film:
         """
         Gets the actors
         :mutate actors: if the field doesn't exist
-        :return: [Actor]
+        :return: [String]
         """
         if not self.actors:
             self.actors = self.handle_error("actors")
