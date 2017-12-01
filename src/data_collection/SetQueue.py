@@ -62,3 +62,10 @@ class SetQueue:
         :return: Boolean
         """
         return self.queue.empty()
+
+    def qsize(self):
+        """
+        Returns approx. length of queue
+        :return: int
+        """
+        return self.queue.qsize()
