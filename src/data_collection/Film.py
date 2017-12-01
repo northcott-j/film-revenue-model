@@ -140,7 +140,7 @@ class Film:
             self.FAILED = True
         return fields[field]['value']
 
-    def find_imdb_id(self):
+    def set_imdb_id(self):
         """
         Tries to search IMDb and find a matching film
         :mutate imdb_id: sets this field in the Film
