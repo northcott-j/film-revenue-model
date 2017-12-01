@@ -503,6 +503,53 @@ class Film:
             self.num_votes = self.handle_error("num_votes")
         return self.num_votes
 
+    def export(self):
+        """
+        Exports the object as a dict
+        :return: a dict of fields
+        """
+        fields = {
+            "id": self.id,
+            "FAILED": self.FAILED,
+            "mojo_id": self.mojo_id,
+            "mojo_title": self.mojo_title,
+            "stars": self.stars,
+            "metascore": self.metascore,
+            "num_votes": self.num_votes,
+            "length": self.length,
+            "mpaa": self.mpaa,
+            "budget": self.budget,
+            "release_date": self.release_date,
+            "month": self.month,
+            "day": self.day,
+            "weekday": self.weekday,
+            "revenue": self.revenue,
+            "director": self.director,
+            "actors": self.actors,
+            "avg_actor_film_appearances": self.avg_actor_film_appearances,
+            "max_actor_film_appearances": self.max_actor_film_appearances,
+            "director_number_of_films": self.director_number_of_films,
+            "avg_actor_film_revenue": self.avg_actor_film_revenue,
+            "max_actor_film_revenue": self.max_actor_film_revenue,
+            "avg_director_film_revenue": self.avg_director_film_revenue,
+            "max_director_film_revenue": self.max_director_film_revenue,
+            "avg_actor_age": self.avg_actor_age,
+            "director_age": self.director_age,
+            "avg_actor_film_stars": self.avg_actor_film_stars,
+            "max_actor_film_stars": self.max_actor_film_stars,
+            "avg_director_film_stars": self.avg_director_film_stars,
+            "max_director_film_stars": self.max_director_film_stars,
+            "avg_actor_film_metascore": self.avg_actor_film_metascore,
+            "max_actor_film_metascore": self.max_actor_film_metascore,
+            "avg_director_film_metascore": self.avg_director_film_metascore,
+            "max_director_film_metascore": self.max_director_film_metascore,
+            "avg_actor_film_votes": self.avg_actor_film_votes,
+            "max_actor_film_votes": self.max_actor_film_votes,
+            "avg_director_film_votes": self.avg_director_film_votes,
+            "max_director_film_votes": self.max_director_film_votes
+        }
+        return fields
+
     ## AGGREGATE METHODS
     @staticmethod
     def get_actor(actor_id):

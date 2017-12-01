@@ -133,6 +133,20 @@ class Actor:
             self.films = self.handle_error('films')
         return self.films
 
+    def export(self):
+        """
+        Export the Actor as a dict
+        :return: dict of fields
+        """
+        fields = {
+            "id": self.id,
+            "FAILED": self.FAILED,
+            "name": self.name,
+            "birthday": self.birthday,
+            "films": self.films
+        }
+        return fields
+
     ## AGGREGATE METHODS
     @staticmethod
     def get_film(film_id):
