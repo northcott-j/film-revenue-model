@@ -34,6 +34,7 @@ class SetQueue:
         :param item: an item
         :mutate seen: adds an item
         :mutate queue: adds an item
+        :exception: small chance some error will happen between is_seen and mark_seen
         :return: Nothing
         """
         if not self.is_seen(item):
