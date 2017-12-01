@@ -17,12 +17,12 @@ class QueueConsumer:
         :mutate thread: Starts and adds a thread
         :return: Nothing
         """
-        self.thread = Thread(self.consume, args=(self, self.input_q, self.output_q,))
+        self.thread = Thread(target=self.consume, args=())
         self.thread.daemon = True
         self.thread.start()
 
     @abstractmethod
-    def consume(self, input_q, output_q):
+    def consume(self):
         """
         method to consume an item from the input and add it to the output
         :param input_q: queue of input items
