@@ -7,4 +7,4 @@ Uses a data set collected from IMDb and Box Office Mojo to create a model in R t
 ## Directions to Run Model
 1.
 
-### Check [blog.jdnorthcott.com](http://blog.jdnorthcott.com) for more details about the project process
+### Check [blog.jdnorthcott.com](http://blog.jdnorthcott.com/search/label/Final%20Project) for more details about the project process
