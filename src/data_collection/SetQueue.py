@@ -55,3 +55,10 @@ class SetQueue:
         :return: Nothing
         """
         return self.queue.task_done()
+
+    def empty(self):
+        """
+        Checks if the Queue is empty
+        :return: Boolean
+        """
+        return self.queue.empty()
