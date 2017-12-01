@@ -1,9 +1,9 @@
 """ Class for an Actor (also Director) """
 import datetime
+import Film
 import requests
-import src.utils.print_colors as COLOR
 from bs4 import BeautifulSoup
-from src.data_collection.Film import Film
+from utils.print_colors import OKGREEN, ENDC, FAIL
 
 
 class Actor:
@@ -42,7 +42,7 @@ class Actor:
             "birthday": {"value": datetime.datetime(3000, 1, 1), "important": True},
             "films": {"value": [], "important": True}
         }
-        print "{0}Actor:{1} {2} field failed!!{3}".format(COLOR.FAIL, self.id, field, COLOR.ENDC)
+        print "{0}Actor:{1} {2} field failed!!{3}".format(FAIL, self.id, field, ENDC)
         if fields[field]['important']:
             self.FAILED = True
         return fields[field]['value']
@@ -55,7 +55,7 @@ class Actor:
         """
         funcs = [self.set_imdb_page, self.set_name, self.set_birthday, self.set_films]
         for f in funcs:
-            print "{0}Calling {1} for {2}...{3}".format(COLOR.OKGREEN, str(f), self.id, COLOR.ENDC)
+            print "{0}Calling {1} for {2}...{3}".format(OKGREEN, str(f), self.id, ENDC)
             f()
 
     def set_imdb_page(self):
@@ -155,7 +155,7 @@ class Actor:
         :param film_id: string id of a film
         :return: a Film
         """
-        return Film.all_films.get(film_id, Film('NonsenseFilmId', 'No Title', '3000'))
+        return Film.Film.all_films.get(film_id, Film.Film('NonsenseFilmId', 'No Title', '3000'))
 
     def sort_films(self):
         """

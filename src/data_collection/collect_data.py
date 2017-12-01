@@ -11,7 +11,7 @@ from Queue import Queue
 from ScrapeIMDbConsumer import ScrapeIMDbConsumer
 from SetQueue import SetQueue
 from time import sleep
-from src.config.GLOBALS import MONGO_DB, MONGO_URL, COLLECTIONS
+from config.GLOBALS import MONGO_DB, MONGO_URL, COLLECTIONS
 
 """
 STEPS:
@@ -39,10 +39,10 @@ def start_consumers():
     :return: array of running consumers
     """
     cs = [FindIMDbConsumer(raw_mojo_q, film_todo_q), ScrapeIMDbConsumer(film_todo_q, film_output_q, actor_todo_q),
-                 ActorConsumer(actor_todo_q, actor_output_q)]
+          ActorConsumer(actor_todo_q, actor_output_q)]
     for c in cs:
         c.start()
-    return consumers
+    return cs
 
 
 def drop_collections(db):
@@ -78,7 +78,8 @@ def get_bom_movies(l, p):
             break
     return titles_table
 
-if __name__ == '__main__':
+
+def main():
     # Page letters
     letters = ['NUM', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

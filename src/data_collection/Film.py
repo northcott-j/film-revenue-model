@@ -1,10 +1,10 @@
 """ Class for a Film """
+import Actor
 import datetime
 import requests
-import src.utils.print_colors as COLOR
-from src.data_collection.Actor import Actor
 from bs4 import BeautifulSoup
 from urllib import urlencode
+from utils.print_colors import OKGREEN, ENDC, FAIL
 
 
 class Film:
@@ -135,7 +135,7 @@ class Film:
             "avg_director_film_votes": {"value": 0, "important": False},
             "max_director_film_votes": {"value": 0, "important": False}
         }
-        print "{0}Film:{1} {2} field failed!!{3}".format(COLOR.FAIL, self.mojo_id, field, COLOR.ENDC)
+        print "{0}Film:{1} {2} field failed!!{3}".format(FAIL, self.mojo_id, field, ENDC)
         if fields[field]['important']:
             self.FAILED = True
         return fields[field]['value']
@@ -179,7 +179,7 @@ class Film:
                  self.set_length, self.set_mpaa, self.set_budget, self.set_release_date, self.set_month, self.set_day,
                  self.set_weekday, self.set_director, self.set_actors, self.set_revenue]
         for f in funcs:
-            print "{0}Calling {1} for {2}...{3}".format(COLOR.OKGREEN, str(f), self.mojo_title, COLOR.ENDC)
+            print "{0}Calling {1} for {2}...{3}".format(OKGREEN, str(f), self.mojo_title, ENDC)
             f()
 
     def set_imdb_page(self):
@@ -568,7 +568,7 @@ class Film:
         :param actor_id: string id of an actor
         :return: an Actor
         """
-        return Actor.all_actors.get(actor_id, Actor('NonsenseActorId', False))
+        return Actor.Actor.all_actors.get(actor_id, Actor.Actor('NonsenseActorId', False))
 
     def get_actor_stats(self, func):
         """
@@ -603,7 +603,7 @@ class Film:
                  self.set_actor_metascore, self.set_actor_votes, self.set_director_num_films, self.set_director_revenue,
                  self.set_director_age, self.set_director_stars, self.set_director_metascore, self.set_director_votes]
         for f in funcs:
-            print "{0}Calling {1} for {2}...{3}".format(COLOR.OKGREEN, str(f), self.mojo_title, COLOR.ENDC)
+            print "{0}Calling {1} for {2}...{3}".format(OKGREEN, str(f), self.mojo_title, ENDC)
             f()
 
     def set_actor_appearances(self):
