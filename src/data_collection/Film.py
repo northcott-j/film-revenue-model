@@ -463,6 +463,16 @@ class Film:
             self.release_date = self.handle_error("release_date")
         return self.release_date
 
+    def get_actors(self):
+        """
+        Gets the actors
+        :mutate actors: if the field doesn't exist
+        :return: [Actor]
+        """
+        if not self.actors:
+            self.actors = self.handle_error("actors")
+        return self.actors
+
     def get_revenue(self):
         """
         Gets the revenue
