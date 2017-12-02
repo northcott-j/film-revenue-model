@@ -566,14 +566,16 @@ class Film:
         return fields
 
     ## AGGREGATE METHODS
-    @staticmethod
-    def get_actor(actor_id):
+    def get_actor(self, actor_id):
         """
         Gets an Actor instance using an actor_id
         :param actor_id: string id of an actor
         :return: an Actor
         """
-        return Actor.Actor.all_actors.get(actor_id, Actor.Actor('NonsenseActorId', False))
+        if actor_id == self.director:
+            return Actor.Actor.all_actors.get("director-{0}".format(actor_id), Actor.Actor('NonsenseActorId', False))
+        else:
+            Actor.Actor.all_actors.get(actor_id, Actor.Actor('NonsenseActorId', False))
 
     def get_actor_stats(self, func):
         """

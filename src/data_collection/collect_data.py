@@ -112,7 +112,10 @@ def main():
     while not actor_output_q.empty():
         a_film = actor_output_q.get()
         actor_output_q.task_done()
-        Actor.all_actors[a_film.id] = a_film
+        if a_film.DIRECTOR:
+            Actor.all_actors["director-{0}".format(a_film.id)] = a_film
+        else:
+            Actor.all_actors[a_film.id] = a_film
 
     # Call aggregate on every film
     for f_id in Film.all_films:
