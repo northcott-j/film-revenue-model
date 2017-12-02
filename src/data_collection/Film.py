@@ -276,7 +276,7 @@ class Film:
         if not self.imdb_page:
             self.set_imdb_page()
         try:
-            self.mpaa = int(self.imdb_page.find('meta', {'itemprop': 'contentRating'})['content'].strip())
+            self.mpaa = self.imdb_page.find('meta', {'itemprop': 'contentRating'})['content'].strip()
         except:
             self.mpaa = self.handle_error('mpaa')
         return self.mpaa
