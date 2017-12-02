@@ -3,7 +3,6 @@ import Actor
 import datetime
 import requests
 from bs4 import BeautifulSoup
-from urllib import urlencode
 from utils.print_colors import OKGREEN, ENDC, FAIL
 
 
@@ -147,8 +146,7 @@ class Film:
         :return: String imdb_id
         """
         query = "http://www.imdb.com/find?ref_=nv_sr_fn&q={0}&s=all".format(self.mojo_title)
-        encoded_query = urlencode(query)
-        results = requests.get(encoded_query)
+        results = requests.get(query)
         # If the page cannot be found or IMDb broke
         if results.status_code >= 400:
             self.id = self.handle_error('id')
