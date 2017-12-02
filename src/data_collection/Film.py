@@ -387,7 +387,7 @@ class Film:
             director_span = self.imdb_page.find('span', {'itemprop': 'director'})
             if director_span:
                 director_link = director_span.find('a')['href']
-                self.director = director_link.replace('/name/', '').split('/')[0]
+                self.director = director_link.replace('/name/', '').replace('?ref_=tt_ov_dr', '').split('/')[0]
             else:
                 self.director = self.handle_error('director')
         except:
