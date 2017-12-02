@@ -416,7 +416,7 @@ class Film:
         try:
             actor_ids = []
             credit_page = self.get_imdb_credits_page()
-            actor_rows = credit_page.td('span', {'itemprop': 'actor'})
+            actor_rows = credit_page.find_all('td', {'itemprop': 'actor'})
             if actor_rows:
                 for ar in actor_rows:
                     link = ar.find('a')
