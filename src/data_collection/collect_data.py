@@ -13,14 +13,6 @@ from SetQueue import SetQueue
 from time import sleep
 from config.GLOBALS import MONGO_DB, MONGO_URL, COLLECTIONS
 
-"""
-STEPS:
-
-6. Add Films to Film.all_films
-7. Add Actors to Actor.all_actors
-8. For each film, get aggregates
-9. Save to MongoDB
-"""
 # Queue of Film objects with only a mojo_id, mojo_title and mojo_year
 raw_mojo_q = Queue()
 # Queue of Film objects with an imdb_id that need to be scraped
