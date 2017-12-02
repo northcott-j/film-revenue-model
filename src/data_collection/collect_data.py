@@ -70,13 +70,11 @@ def get_bom_movies(l, p):
     if res.status_code >= 400:
         return []
     soup = BeautifulSoup(res.content, "html.parser")
-    tds = soup.find_all('td')
-    titles_table = []
-    for t in tds:
-        if "Total Gross / Theaters" in t.text.strip():
-            titles_table = t.parent.parent
-            break
-    return titles_table
+    movie_rows = []
+    for a in soup.find_all('a'):
+        if '/movies/?id=' in a.get('href', ''):
+            movie_rows.append(a.parent.parent.parent)
+    return movie_rows
 
 
 def main():
@@ -87,23 +85,27 @@ def main():
     for letter in letters:
         page = 1
         table = get_bom_movies(letter, str(page))
-        # While there's a table and there's at least one film in it
-        while table and len(table) > 1:
-            # Skipping the header row
-            for td in table[1:]:
+        while table:
+            for tr in table:
                 try:
-                    # If revenue is not applicable
-                    if td[2].text.strip() == 'n/a':
+                    tds = tr.find_all('td')
+                    if len(tds) < 7:
                         continue
-                    title = td[0].text.strip()
-                    mojo_id = td[0].find('a')['href'].text.repleace('/movies/?id=')
-                    mojo_year = str(datetime.strptime(td[6].text.strip(), "%d/%m/%Y").year)
+                    # If revenue is not applicable
+                    if tds[2].text.strip() == 'n/a':
+                        continue
+                    title = tds[0].text.strip()
+                    mojo_id = tds[0].find('a')['href'].replace('/movies/?id=', '')
+                    mojo_year = str(datetime.strptime(tds[6].text.strip(), "%m/%d/%Y").year)
                     raw_mojo_q.put(Film(mojo_id, title, mojo_year))
                 except:
-                    print "Failed while processing: {0}".format(str(td))
+                    print "Failed while processing: {0}".format(str(tr))
+            if letter == 'NUM':
+                break
             # Get the next page of films
             page += 1
             table = get_bom_movies(letter, str(page))
+
     while not (raw_mojo_q.empty() and film_todo_q.empty() and actor_todo_q.empty()):
         print "raw: {0} films: {1} actors: {2}".format(raw_mojo_q.qsize(), film_todo_q.qsize(), actor_todo_q.qsize())
         sleep(5)
