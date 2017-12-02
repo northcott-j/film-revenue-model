@@ -95,7 +95,7 @@ def main():
                     if tds[2].text.strip() == 'n/a':
                         continue
                     title = tds[0].text.strip()
-                    mojo_id = tds[0].find('a')['href'].replace('/movies/?id=', '')
+                    mojo_id = tds[0].find('a')['href'].replace('/movies/?id=', '').replace('.htm', '')
                     mojo_year = str(datetime.strptime(tds[6].text.strip(), "%m/%d/%Y").year)
                     raw_mojo_q.put(Film(mojo_id, title, mojo_year))
                 except:
