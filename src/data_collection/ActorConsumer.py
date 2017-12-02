@@ -14,4 +14,4 @@ class ActorConsumer(QueueConsumer):
         actor_todo = self.input_q.get()
         self.input_q.task_done()
         actor_todo.set_non_aggregate_fields()
-        self.output_q.put(actor_todo)
+        self.output_q.put(actor_todo, actor_todo.id)

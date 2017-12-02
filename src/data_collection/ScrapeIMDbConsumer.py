@@ -18,5 +18,6 @@ class ScrapeIMDbConsumer(QueueConsumer):
         film_todo = self.input_q.get()
         self.input_q.task_done()
         film_todo.set_non_aggregate_fields()
+        self.output_q.put(film_todo, film_todo.id)
         for a in film_todo.get_actors():
-            self.actor_ins.put(a)
+            self.actor_ins.put(a, a.id)

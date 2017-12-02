@@ -15,4 +15,4 @@ class FindIMDbConsumer(QueueConsumer):
         self.input_q.task_done()
         # Sets imdb_id and returns the result ('' if not found)
         if film_todo.set_imdb_id():
-            self.output_q.put(film_todo)
+            self.output_q.put(film_todo, film_todo.id)
