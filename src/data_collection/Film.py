@@ -261,7 +261,7 @@ class Film:
         if not self.imdb_page:
             self.set_imdb_page()
         try:
-            self.length = int(self.imdb_page.find('time', {'itemprop': 'duration'}).text.replace('min', '').strip())
+            self.length = int(self.imdb_page.find('time', {'itemprop': 'duration'})['datetime'].replace('PT', '').replace('M', '').strip())
         except:
             self.length = self.handle_error('length')
         return self.length
