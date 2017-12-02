@@ -66,7 +66,7 @@ def get_bom_movies(l, p):
     for a in soup.find_all('a'):
         if '/movies/?id=' in a.get('href', ''):
             movie_rows.append(a.parent.parent.parent)
-    return movie_rows
+    return [m for m in movie_rows if m.name == 'tr']
 
 
 def main():
@@ -78,6 +78,7 @@ def main():
         page = 1
         table = get_bom_movies(letter, str(page))
         while table:
+            print "Starting scrape of {0}{1}...".format(letter, str(page))
             for tr in table:
                 try:
                     tds = tr.find_all('td')
