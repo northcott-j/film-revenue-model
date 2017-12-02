@@ -439,14 +439,21 @@ class Film:
         if not self.mojo_page:
             self.set_mojo_page()
         try:
-            table_items = self.mojo_page.find_all('td')
-            for ti in table_items:
-                if '$' in ti.text and 'Worldwide:' in ti.previousSibling.text:
-                    revenue = ''
-                    for c in ti.text:
-                        if c.isdigit():
-                            revenue += c
-                    self.revenue = int(revenue)
+            possible_divs = self.mojo_page.find_all('div', {'class':"mp_box_content"})
+            for div in possible_divs:
+                if "Worldwide:" in div.text:
+                    tds = div.find_all('td')
+                    previous = None
+                    for td in tds:
+                        if '$' in td.text and "Worldwide:" in previous.text:
+                            revenue = ''
+                            for c in td.text:
+                                if c.isdigit():
+                                    revenue += c
+                            self.revenue = int(revenue)
+                            break
+                        previous = td
+                    break
         except:
             self.revenue = self.handle_error('revenue')
         return self.revenue
