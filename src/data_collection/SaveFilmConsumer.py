@@ -2,6 +2,7 @@
 import pymongo
 from config.GLOBALS import MONGO_DB, MONGO_URL
 from QueueConsumer import QueueConsumer
+from utils.print_colors import OKBLUE, ENDC
 
 
 class SaveFilmConsumer(QueueConsumer):
@@ -20,6 +21,7 @@ class SaveFilmConsumer(QueueConsumer):
         """
         film_todo = self.input_q.get()
         self.input_q.task_done()
+        print "{0}Saving Film:{1} to the database...{2}".format(OKBLUE, film_todo.id, ENDC)
         self.collection.insert(film_todo.export())
         # Drop useless fields
         film_todo.purge()

@@ -2,6 +2,7 @@
 import pymongo
 from config.GLOBALS import MONGO_DB, MONGO_URL
 from QueueConsumer import QueueConsumer
+from utils.print_colors import OKBLUE, ENDC
 
 
 class SaveActorConsumer(QueueConsumer):
@@ -21,6 +22,7 @@ class SaveActorConsumer(QueueConsumer):
         """
         actor_todo = self.input_q.get()
         self.input_q.task_done()
+        print "{0}Saving Actor:{1} to the database...{2}".format(OKBLUE, actor_todo.id, ENDC)
         self.collection.insert(actor_todo.export())
         # Drop useless fields
         actor_todo.purge()
