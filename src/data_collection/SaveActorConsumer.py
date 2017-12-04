@@ -22,6 +22,8 @@ class SaveActorConsumer(QueueConsumer):
         actor_todo = self.input_q.get()
         self.input_q.task_done()
         self.collection.insert(actor_todo.export())
+        # Drop useless fields
+        actor_todo.purge()
         if actor_todo.DIRECTOR:
             self.output_q.put(actor_todo, "director-{0}".format(actor_todo.id))
         else:

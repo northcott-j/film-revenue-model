@@ -21,4 +21,6 @@ class SaveFilmConsumer(QueueConsumer):
         film_todo = self.input_q.get()
         self.input_q.task_done()
         self.collection.insert(film_todo.export())
+        # Drop useless fields
+        film_todo.purge()
         self.output_q.put(film_todo, film_todo.id)

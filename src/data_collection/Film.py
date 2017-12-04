@@ -631,6 +631,15 @@ class Film:
         self.avg_director_film_votes = fields.get('avg_director_film_votes', self.handle_error('avg_director_film_votes'))
         self.max_director_film_votes = fields.get('max_director_film_votes', self.handle_error('max_director_film_votes'))
 
+    def purge(self):
+        """
+        Removes imdb_page and mojo_page field to free up space
+        :mutate imdb_page: sets to None
+        :mutate mojo_page: sets to None
+        :return: Nothing
+        """
+        self.imdb_page = None
+        self.mojo_page = None
 
     ## AGGREGATE METHODS
     def get_actor(self, actor_id):

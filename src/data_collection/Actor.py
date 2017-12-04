@@ -168,6 +168,14 @@ class Actor:
         self.birthday = fields.get('birthday', self.handle_error('birthday'))
         self.films = fields.get('films', self.handle_error('films'))
 
+    def purge(self):
+        """
+        Removes imdb_page field to free up space
+        :mutate imdb_page: sets to None
+        :return: Nothing
+        """
+        self.imdb_page = None
+
 
     ## AGGREGATE METHODS
     @staticmethod
