@@ -154,10 +154,10 @@ class Film:
             :param tolerance: Number of years to allow in either direction
             :return: Boolean
             """
-            years = []
+            years = set(mojo_year)
             for i in range(1, tolerance + 1):
-                years.append(str(int(mojo_year) - i))
-                years.append(str(int(mojo_year) + i))
+                years.add(str(int(mojo_year) - i))
+                years.add(str(int(mojo_year) + i))
             for year in years:
                 if year in text:
                     return True
@@ -177,7 +177,7 @@ class Film:
                 title_table = s.find('table', {'class': 'findList'})
                 title_sections = title_table.find_all('td', {'class': 'result_text'})
                 for ts in title_sections:
-                    if ("Video Game" not in ts.text or "TV Episode" not in ts.text) \
+                    if ("Video Game" not in ts.text and "TV Episode" not in ts.text and "TV Series" not in ts.text) \
                             and valid_year(self.mojo_year, ts.text, YEAR_TOLERANCE):
                         link = ts.find('a')['href']
                         # Format is normally href="/title/tt0086190/?ref_=fn_al_tt_1"
@@ -310,12 +310,12 @@ class Film:
         if not self.imdb_page:
             self.set_imdb_page()
         try:
-            txt_blocks = self.imdb_page.find_all('div', {'class': 'txt-block'})
+            txt_blocks = self.imdb_page.find('div', {'id': 'titleDetails'}).find_all('div', {'class': 'txt-block'})
             for tb in txt_blocks:
                 h4 = tb.find('h4')
                 if h4 and 'Budget' in h4.text:
                     budget = ''
-                    for c in h4.text:
+                    for c in tb.text:
                         if c.isdigit():
                             budget += c
                     self.budget = int(budget)

@@ -103,6 +103,22 @@ def main():
         print "raw: {0} films: {1} actors: {2}".format(raw_mojo_q.qsize(), film_todo_q.qsize(), actor_todo_q.qsize())
         sleep(5)
 
+    print "Connecting to {0}...".format(MONGO_URL)
+    client = pymongo.MongoClient(MONGO_DB)
+    print "Linking to the following data: {0}...".format(MONGO_DB)
+    db_conn = client[MONGO_DB]
+    drop_collections(db_conn)
+
+    # Save all of the films to MongoDb
+    for f_id in Film.all_films:
+        db_conn['films'].insert(Film.all_films[f_id].export())
+
+    # Save all of the actors to MongoDb
+    for a_id in Actor.all_actors:
+        db_conn['actors'].insert(Actor.all_actors[a_id].export())
+
+    print "Finished saving to MongoDb..."
+
     # Add all finished films to the Film.dict
     while not film_output_q.empty():
         q_film = film_output_q.get()
