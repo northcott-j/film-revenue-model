@@ -17,9 +17,17 @@ class QueueConsumer:
         :mutate thread: Starts and adds a thread
         :return: Nothing
         """
-        self.thread = Thread(target=self.consume, args=())
+        self.thread = Thread(target=self.consume_loop, args=())
         self.thread.daemon = True
         self.thread.start()
+
+    def consume_loop(self):
+        """
+        While True to keep consuming items
+        :return: Nothing
+        """
+        while True:
+            self.consume()
 
     @abstractmethod
     def consume(self):
