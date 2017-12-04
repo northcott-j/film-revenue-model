@@ -609,7 +609,7 @@ class Film:
         for actor_id in self.actors:
             val = func(actor_id)
             # If the actor doesn't have a value, subtract from length and skip
-            if not val:
+            if not val or val < 0:
                 length -= 1
                 continue
             sum_stat += val
