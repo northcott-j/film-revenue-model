@@ -22,4 +22,7 @@ class SaveActorConsumer(QueueConsumer):
         actor_todo = self.input_q.get()
         self.input_q.task_done()
         self.collection.insert(actor_todo.export())
-        self.output_q.put(actor_todo, actor_todo.id)
+        if actor_todo.DIRECTOR:
+            self.output_q.put(actor_todo, "director-{0}".format(actor_todo.id))
+        else:
+            self.output_q.put(actor_todo, actor_todo.id)
