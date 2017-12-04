@@ -132,7 +132,7 @@ class Actor:
                     if div_id:
                         film_ids.append(div_id.replace(replace_word, "").strip())
                 # should be in the order of newest to oldest so it needs to be reversed
-                self.films = reversed(film_ids)
+                self.films = [f for f in reversed(film_ids)]
             else:
                 self.films = self.handle_error('films')
         except:
@@ -147,6 +147,7 @@ class Actor:
         fields = {
             "id": self.id,
             "FAILED": self.FAILED,
+            "DIRECTOR": self.DIRECTOR,
             "name": self.name,
             "birthday": self.birthday,
             "films": self.films
