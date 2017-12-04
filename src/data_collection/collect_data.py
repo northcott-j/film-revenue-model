@@ -140,7 +140,7 @@ def main():
                     title = tds[0].text.strip()
                     mojo_id = tds[0].find('a')['href'].replace('/movies/?id=', '').replace('.htm', '')
                     mojo_year = str(datetime.strptime(tds[6].text.strip(), "%m/%d/%Y").year)
-                    raw_mojo_q.put(Film(mojo_id, title, mojo_year))
+                    raw_mojo_q.put(Film(mojo_id, title, mojo_year), mojo_id)
                 except:
                     print "Failed while processing: {0}".format(str(tr))
             if letter == 'NUM':
