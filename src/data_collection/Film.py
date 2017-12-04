@@ -708,7 +708,7 @@ class Film:
         :mutate director_number_of_films: sets this field
         :return: int
         """
-        self.director_number_of_films = self.get_actor(self.director).get_num_appearances_before(self.id)
+        self.director_number_of_films = self.get_actor("director-{0}".format(self.director)).get_num_appearances_before(self.id)
         return self.director_number_of_films
 
     def set_director_revenue(self):
@@ -718,8 +718,8 @@ class Film:
         :mutate max_director_film_revenue: sets this field
         :return: avg, max
         """
-        self.avg_director_film_revenue = self.get_actor(self.director).get_avg_film_revenue_before(self.id)
-        self.max_director_film_revenue = self.get_actor(self.director).get_max_film_revenue_before(self.id)
+        self.avg_director_film_revenue = self.get_actor("director-{0}".format(self.director)).get_avg_film_revenue_before(self.id)
+        self.max_director_film_revenue = self.get_actor("director-{0}".format(self.director)).get_max_film_revenue_before(self.id)
         return self.avg_director_film_revenue, self.max_director_film_revenue
 
     def set_director_age(self):
@@ -728,7 +728,7 @@ class Film:
         :mutate avg_director_age: sets this field
         :return: avg
         """
-        self.director_age = self.get_actor(self.director).get_age_during(self.id)
+        self.director_age = self.get_actor("director-{0}".format(self.director)).get_age_during(self.id)
         return self.director_age
 
     def set_director_stars(self):
@@ -738,8 +738,8 @@ class Film:
         :mutate max_director_film_stars: sets this field
         :return: avg, max
         """
-        self.avg_director_film_stars = self.get_actor(self.director).get_avg_film_stars_before(self.id)
-        self.max_director_film_stars = self.get_actor(self.director).get_max_film_stars_before(self.id)
+        self.avg_director_film_stars = self.get_actor("director-{0}".format(self.director)).get_avg_film_stars_before(self.id)
+        self.max_director_film_stars = self.get_actor("director-{0}".format(self.director)).get_max_film_stars_before(self.id)
         return self.avg_director_film_stars, self.max_director_film_stars
 
     def set_director_metascore(self):
@@ -749,8 +749,8 @@ class Film:
         :mutate max_director_film_metascore: sets this field
         :return: avg, max
         """
-        self.avg_director_film_metascore = self.get_actor(self.director).get_avg_film_metascore_before(self.id)
-        self.max_director_film_metascore = self.get_actor(self.director).get_max_film_metascore_before(self.id)
+        self.avg_director_film_metascore = self.get_actor("director-{0}".format(self.director)).get_avg_film_metascore_before(self.id)
+        self.max_director_film_metascore = self.get_actor("director-{0}".format(self.director)).get_max_film_metascore_before(self.id)
         return self.avg_director_film_metascore, self.max_director_film_metascore
 
     def set_director_votes(self):
@@ -760,6 +760,6 @@ class Film:
         :mutate max_director_film_votes: sets this field
         :return: avg, max
         """
-        self.avg_director_film_votes = self.get_actor(self.director).get_avg_film_votes_before(self.id)
-        self.max_director_film_votes = self.get_actor(self.director).get_max_film_votes_before(self.id)
+        self.avg_director_film_votes = self.get_actor("director-{0}".format(self.director)).get_avg_film_votes_before(self.id)
+        self.max_director_film_votes = self.get_actor("director-{0}".format(self.director)).get_max_film_votes_before(self.id)
         return self.avg_director_film_votes, self.max_director_film_votes
