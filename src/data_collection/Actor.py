@@ -96,7 +96,10 @@ class Actor:
         if not self.imdb_page:
             self.set_imdb_page()
         try:
-            self.birthday = datetime.datetime.strptime(self.imdb_page.find('time', {'itemprop': 'birthDate'})['datetime'].strip(), "%Y-%m-%d")
+            birthdate = self.imdb_page.find('time', {'itemprop': 'birthDate'})['datetime'].strip()
+            # If only the year is available, set month and day to 1-1
+            birthdate = birthdate.replace("-0-0", "-01-01")
+            self.birthday = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
         except:
             self.birthday = self.handle_error('birthday')
         return self.birthday
