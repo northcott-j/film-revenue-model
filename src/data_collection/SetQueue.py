@@ -4,8 +4,8 @@ from multiprocessing import Lock
 
 
 class SetQueue:
-    def __init__(self):
-        self.seen = set()
+    def __init__(self, starting_set=set()):
+        self.seen = starting_set
         self.seen_lock = Lock()
         self.queue = Queue()
 

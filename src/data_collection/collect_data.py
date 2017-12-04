@@ -15,34 +15,6 @@ from SetQueue import SetQueue
 from time import sleep
 from config.GLOBALS import MONGO_DB, MONGO_URL, COLLECTIONS
 
-# Queue of Film objects with only a mojo_id, mojo_title and mojo_year
-raw_mojo_q = Queue()
-# Queue of Film objects with an imdb_id that need to be scraped
-film_todo_q = SetQueue()
-# Queue of Films to be saved
-film_save_q = SetQueue()
-# Queue of Actors to be saved
-actor_save_q = SetQueue()
-# Queue of Actor objects with an imdb_id that need to be scraped
-actor_todo_q = SetQueue()
-# Queue of finished Film objects
-film_output_q = SetQueue()
-# Queue of finished Actor objects
-actor_output_q = SetQueue()
-
-
-def start_consumers():
-    """
-    Starts each consumer
-    :return: array of running consumers
-    """
-    cs = [FindIMDbConsumer(raw_mojo_q, film_todo_q), ScrapeIMDbConsumer(film_todo_q, film_save_q, actor_todo_q),
-          ActorConsumer(actor_todo_q, actor_save_q), SaveActorConsumer(actor_save_q, actor_output_q),
-          SaveFilmConsumer(film_save_q, film_output_q)]
-    for c in cs:
-        c.start()
-    return cs
-
 
 def drop_collections(db):
     """
@@ -55,6 +27,33 @@ def drop_collections(db):
         if c in cols:
             print "Dropping {0}...".format(c)
             db.drop_collection(c)
+
+
+def get_seen_db_films(db):
+    """
+    Gets all of the movies already seen in the database
+    :param db: data base connection
+    :return: set(imdb_id)
+    """
+    return set(db['films'].distinct("id", {}))
+
+
+def get_seen_db_actors(db):
+    """
+        Gets all of the actors already seen in the database
+        :param db: data base connection
+        :return: set(imdb_id)
+        """
+    return set(db['actors'].distinct("id", {"DIRECTOR": False}))
+
+
+def get_seen_db_directors(db):
+    """
+        Gets all of the directors already seen in the database
+        :param db: data base connection
+        :return: set(director-imdb_id)
+        """
+    return set("director-{0}".format(imdb_id) for imdb_id in db['actors'].distinct("id", {"DIRECTOR": True}))
 
 
 def get_bom_movies(l, p):
@@ -81,10 +80,39 @@ def main():
     client = pymongo.MongoClient(MONGO_URL)
     print "Linking to the following data: {0}...".format(MONGO_DB)
     db_conn = client[MONGO_DB]
-    drop_collections(db_conn)
+    # Seen films
+    seen_films = get_seen_db_films(db_conn)
+    seen_people = get_seen_db_actors(db_conn).union(get_seen_db_directors(db_conn))
+    # Queue of Film objects with only a mojo_id, mojo_title and mojo_year
+    raw_mojo_q = Queue()
+    # Queue of Film objects with an imdb_id that need to be scraped
+    film_todo_q = SetQueue(starting_set=seen_films)
+    # Queue of Films to be saved
+    film_save_q = SetQueue(starting_set=seen_films)
+    # Queue of Actors to be saved
+    actor_save_q = SetQueue(starting_set=seen_people)
+    # Queue of Actor objects with an imdb_id that need to be scraped
+    actor_todo_q = SetQueue(starting_set=seen_people)
+    # Queue of finished Film objects
+    film_output_q = SetQueue(starting_set=seen_films)
+    # Queue of finished Actor objects
+    actor_output_q = SetQueue(starting_set=seen_people)
     # Page letters
     letters = ['NUM', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    def start_consumers():
+        """
+        Starts each consumer
+        :return: array of running consumers
+        """
+        cs = [FindIMDbConsumer(raw_mojo_q, film_todo_q), ScrapeIMDbConsumer(film_todo_q, film_save_q, actor_todo_q),
+              ActorConsumer(actor_todo_q, actor_save_q), SaveActorConsumer(actor_save_q, actor_output_q),
+              SaveFilmConsumer(film_save_q, film_output_q)]
+        for c in cs:
+            c.start()
+        return cs
+
     consumers = start_consumers()
     for letter in letters:
         page = 1
