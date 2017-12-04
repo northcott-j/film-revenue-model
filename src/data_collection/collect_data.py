@@ -8,6 +8,8 @@ from datetime import datetime
 from Film import Film
 from FindIMDbConsumer import FindIMDbConsumer
 from Queue import Queue
+from SaveActorConsumer import SaveActorConsumer
+from SaveFilmConsumer import SaveFilmConsumer
 from ScrapeIMDbConsumer import ScrapeIMDbConsumer
 from SetQueue import SetQueue
 from time import sleep
@@ -17,6 +19,10 @@ from config.GLOBALS import MONGO_DB, MONGO_URL, COLLECTIONS
 raw_mojo_q = Queue()
 # Queue of Film objects with an imdb_id that need to be scraped
 film_todo_q = SetQueue()
+# Queue of Films to be saved
+film_save_q = SetQueue()
+# Queue of Actors to be saved
+actor_save_q = SetQueue()
 # Queue of Actor objects with an imdb_id that need to be scraped
 actor_todo_q = SetQueue()
 # Queue of finished Film objects
@@ -30,8 +36,9 @@ def start_consumers():
     Starts each consumer
     :return: array of running consumers
     """
-    cs = [FindIMDbConsumer(raw_mojo_q, film_todo_q), ScrapeIMDbConsumer(film_todo_q, film_output_q, actor_todo_q),
-          ActorConsumer(actor_todo_q, actor_output_q)]
+    cs = [FindIMDbConsumer(raw_mojo_q, film_todo_q), ScrapeIMDbConsumer(film_todo_q, film_save_q, actor_todo_q),
+          ActorConsumer(actor_todo_q, actor_save_q), SaveActorConsumer(actor_save_q, actor_output_q),
+          SaveFilmConsumer(film_save_q, film_output_q)]
     for c in cs:
         c.start()
     return cs
@@ -70,6 +77,11 @@ def get_bom_movies(l, p):
 
 
 def main():
+    print "Connecting to {0}...".format(MONGO_URL)
+    client = pymongo.MongoClient(MONGO_URL)
+    print "Linking to the following data: {0}...".format(MONGO_DB)
+    db_conn = client[MONGO_DB]
+    drop_collections(db_conn)
     # Page letters
     letters = ['NUM', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -99,25 +111,10 @@ def main():
             page += 1
             table = get_bom_movies(letter, str(page))
 
-    while not (raw_mojo_q.empty() and film_todo_q.empty() and actor_todo_q.empty()):
-        print "raw: {0} films: {1} actors: {2}".format(raw_mojo_q.qsize(), film_todo_q.qsize(), actor_todo_q.qsize())
+    while not (raw_mojo_q.empty() and film_todo_q.empty() and actor_todo_q.empty() and actor_save_q.empty() and film_save_q.empty()):
+        print "raw: {0} films: {1} actors: {2} save_films: {3} save_actors: {4}".format(
+            raw_mojo_q.qsize(), film_todo_q.qsize(), actor_todo_q.qsize(), film_save_q.qsize(), actor_save_q.qsize())
         sleep(5)
-
-    print "Connecting to {0}...".format(MONGO_URL)
-    client = pymongo.MongoClient(MONGO_DB)
-    print "Linking to the following data: {0}...".format(MONGO_DB)
-    db_conn = client[MONGO_DB]
-    drop_collections(db_conn)
-
-    # Save all of the films to MongoDb
-    for f_id in Film.all_films:
-        db_conn['films'].insert(Film.all_films[f_id].export())
-
-    # Save all of the actors to MongoDb
-    for a_id in Actor.all_actors:
-        db_conn['actors'].insert(Actor.all_actors[a_id].export())
-
-    print "Finished saving to MongoDb..."
 
     # Add all finished films to the Film.dict
     while not film_output_q.empty():
@@ -138,16 +135,10 @@ def main():
     for f_id in Film.all_films:
         Film.all_films[f_id].set_aggregate_fields()
 
-    print "Connecting to {0}...".format(MONGO_URL)
-    client = pymongo.MongoClient(MONGO_DB)
-    print "Linking to the following data: {0}...".format(MONGO_DB)
-    db_conn = client[MONGO_DB]
-    drop_collections(db_conn)
-
     # Save all of the films to MongoDb
     for f_id in Film.all_films:
-        db_conn['films'].insert(Film.all_films[f_id].export())
+        db_conn['films_agg'].insert(Film.all_films[f_id].export())
 
     # Save all of the actors to MongoDb
     for a_id in Actor.all_actors:
-        db_conn['actors'].insert(Actor.all_actors[a_id].export())
+        db_conn['actors_agg'].insert(Actor.all_actors[a_id].export())
