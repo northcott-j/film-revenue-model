@@ -3,6 +3,7 @@ import Actor
 import datetime
 import requests
 from bs4 import BeautifulSoup
+from config.GLOBALS import YEAR_TOLERANCE
 from utils.print_colors import OKGREEN, ENDC, FAIL
 
 
@@ -145,6 +146,23 @@ class Film:
         :mutate imdb_id: sets this field in the Film
         :return: String imdb_id
         """
+        def valid_year(mojo_year, text, tolerance):
+            """
+            Checks if the year of a film on BOM matches IMDb (with a certain tolerance)
+            :param mojo_year: The year to look for
+            :param text: The text of the search result from IMDb
+            :param tolerance: Number of years to allow in either direction
+            :return: Boolean
+            """
+            years = []
+            for i in range(1, tolerance + 1):
+                years.append(str(int(mojo_year) - i))
+                years.append(str(int(mojo_year) + i))
+            for year in years:
+                if year in text:
+                    return True
+            return False
+
         query = "http://www.imdb.com/find?ref_=nv_sr_fn&q={0}&s=all".format(self.mojo_title)
         results = requests.get(query)
         # If the page cannot be found or IMDb broke
@@ -159,7 +177,8 @@ class Film:
                 title_table = s.find('table', {'class': 'findList'})
                 title_sections = title_table.find_all('td', {'class': 'result_text'})
                 for ts in title_sections:
-                    if self.mojo_year in ts.text and ("Video Game" not in ts.text or "TV Episode" not in ts.text):
+                    if ("Video Game" not in ts.text or "TV Episode" not in ts.text) \
+                            and valid_year(self.mojo_year, ts.text, YEAR_TOLERANCE):
                         link = ts.find('a')['href']
                         # Format is normally href="/title/tt0086190/?ref_=fn_al_tt_1"
                         self.id = link.replace('/title/', '').split('/')[0]

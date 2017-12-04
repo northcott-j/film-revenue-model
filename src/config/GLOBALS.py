@@ -3,3 +3,4 @@
 MONGO_URL = "mongodb://localhost:27017/"
 MONGO_DB = "ds4100"
 COLLECTIONS = ['films', 'actors']
+YEAR_TOLERANCE = 2
