@@ -119,6 +119,9 @@ class Actor:
             if not self.DIRECTOR:
                 films = self.imdb_page.find('div', {'id': 'filmo-head-actor'})
                 replace_word = 'actor-'
+                if not films:
+                    films = self.imdb_page.find('div', {'id': 'filmo-head-actress'})
+                    replace_word = 'actress-'
             else:
                 films = self.imdb_page.find('div', {'id': 'filmo-head-director'})
                 replace_word = 'director-'
