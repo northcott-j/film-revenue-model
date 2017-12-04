@@ -143,30 +143,3 @@ def main():
         print "raw: {0} films: {1} actors: {2} save_films: {3} save_actors: {4}".format(
             raw_mojo_q.qsize(), film_todo_q.qsize(), actor_todo_q.qsize(), film_save_q.qsize(), actor_save_q.qsize())
         sleep(5)
-
-    # Add all finished films to the Film.dict
-    while not film_output_q.empty():
-        q_film = film_output_q.get()
-        film_output_q.task_done()
-        Film.all_films[q_film.id] = q_film
-
-    # Add all finished actors to the Actor.dict
-    while not actor_output_q.empty():
-        a_film = actor_output_q.get()
-        actor_output_q.task_done()
-        if a_film.DIRECTOR:
-            Actor.all_actors["director-{0}".format(a_film.id)] = a_film
-        else:
-            Actor.all_actors[a_film.id] = a_film
-
-    # Call aggregate on every film
-    for f_id in Film.all_films:
-        Film.all_films[f_id].set_aggregate_fields()
-
-    # Save all of the films to MongoDb
-    for f_id in Film.all_films:
-        db_conn['films_agg'].insert(Film.all_films[f_id].export())
-
-    # Save all of the actors to MongoDb
-    for a_id in Actor.all_actors:
-        db_conn['actors_agg'].insert(Actor.all_actors[a_id].export())

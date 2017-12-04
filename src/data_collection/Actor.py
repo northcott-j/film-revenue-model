@@ -154,6 +154,21 @@ class Actor:
         }
         return fields
 
+    def import_fields(self, fields):
+        """
+        Import an actor from dict
+        :param fields: dictionary of values
+        :mutate all fields: every field is updated
+        :return: nothing
+        """
+        self.id = fields.get('id', self.handle_error('id'))
+        self.FAILED = fields.get('FAILED', self.handle_error('FAILED'))
+        self.DIRECTOR = fields.get('DIRECTOR', self.handle_error('DIRECTOR'))
+        self.name = fields.get('name', self.handle_error('name'))
+        self.birthday = fields.get('birthday', self.handle_error('birthday'))
+        self.films = fields.get('films', self.handle_error('films'))
+
+
     ## AGGREGATE METHODS
     @staticmethod
     def get_film(film_id):
