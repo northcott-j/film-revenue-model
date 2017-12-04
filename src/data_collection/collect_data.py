@@ -38,6 +38,15 @@ def get_seen_db_films(db):
     return set(db['films'].distinct("id", {}))
 
 
+def get_scraped_mojo_ids(db):
+    """
+        Gets all of the mojo_ids of movies already processed that passed
+        :param db: data base connection
+        :return: set(mojo_id)
+        """
+    return set(db['films'].distinct("mojo_id", {}))
+
+
 def get_seen_db_actors(db):
     """
         Gets all of the actors already seen in the database
@@ -82,9 +91,10 @@ def main():
     db_conn = client[MONGO_DB]
     # Seen films
     seen_films = get_seen_db_films(db_conn)
+    seen_mojos = get_scraped_mojo_ids(db_conn)
     seen_people = get_seen_db_actors(db_conn).union(get_seen_db_directors(db_conn))
     # Queue of Film objects with only a mojo_id, mojo_title and mojo_year
-    raw_mojo_q = Queue()
+    raw_mojo_q = SetQueue(starting_set=seen_mojos)
     # Queue of Film objects with an imdb_id that need to be scraped
     film_todo_q = SetQueue(starting_set=seen_films)
     # Queue of Films to be saved
