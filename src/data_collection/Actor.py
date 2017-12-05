@@ -35,7 +35,36 @@ class Actor:
         :mutate FAILED: if the field is important
         :return: default value for field
         """
-        fields = {
+        color = WARNING
+        if self.get_field_importance(field):
+            self.FAILED = True
+            color = FAIL
+        print "{0}Actor:{1} {2} field failed!!{3}".format(color, self.id, field, ENDC)
+        return self.get_default_value(field)
+
+    def get_default_value(self, field):
+        """
+        Gets the default value for a field
+        :param field: field to lookup
+        :return: val
+        """
+        return self.get_field_defaults()[field]['value']
+
+    def get_field_importance(self, field):
+        """
+        Is a field important and warrants a failure
+        :param field: field to lookup
+        :return: boolean
+        """
+        return self.get_field_defaults()[field]['important']
+
+    @staticmethod
+    def get_field_defaults():
+        """
+        Return default value and imporance
+        :return: dict
+        """
+        return {
             "id": {"value": '', "important": True},
             "FAILED": {"value": True, "important": False},
             "DIRECTOR": {"value": False, "important": False},
@@ -44,12 +73,6 @@ class Actor:
             "birthday": {"value": datetime.datetime(3000, 1, 1), "important": True},
             "films": {"value": [], "important": True}
         }
-        color = WARNING
-        if fields[field]['important']:
-            self.FAILED = True
-            color = FAIL
-        print "{0}Actor:{1} {2} field failed!!{3}".format(color, self.id, field, ENDC)
-        return fields[field]['value']
 
     def set_non_aggregate_fields(self):
         """
@@ -165,12 +188,12 @@ class Actor:
         :mutate all fields: every field is updated
         :return: nothing
         """
-        self.id = fields.get('id', None) or self.handle_error('id')
-        self.FAILED = fields.get('FAILED', None) or self.handle_error('FAILED')
-        self.DIRECTOR = fields.get('DIRECTOR', None) or self.handle_error('DIRECTOR')
-        self.name = fields.get('name', None) or self.handle_error('name')
-        self.birthday = fields.get('birthday', None) or self.handle_error('birthday')
-        self.films = fields.get('films', None) or self.handle_error('films')
+        self.id = fields.get('id', None) or self.get_default_value('id')
+        self.FAILED = fields.get('FAILED', None) or self.get_default_value('FAILED')
+        self.DIRECTOR = fields.get('DIRECTOR', None) or self.get_default_value('DIRECTOR')
+        self.name = fields.get('name', None) or self.get_default_value('name')
+        self.birthday = fields.get('birthday', None) or self.get_default_value('birthday')
+        self.films = fields.get('films', None) or self.get_default_value('films')
 
     def purge(self):
         """
@@ -229,7 +252,8 @@ class Actor:
                 continue
             length += 1
             sum_stat += val
-        return sum_stat / length
+        # If length is 0, divide by 1
+        return sum_stat / max(1, length)
 
     def get_film_max_before(self, func, stop):
         """
@@ -259,7 +283,7 @@ class Actor:
         :param f_id: the id for the film
         :return: int
         """
-        return self.get_film(f_id).get_release_date().year - self.birthday
+        return self.get_film(f_id).get_release_date().year - (self.birthday or self.get_default_value('birthday')).year
 
     def get_num_appearances_before(self, f_id):
         """

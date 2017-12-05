@@ -96,7 +96,36 @@ class Film:
         :mutate FAILED: if the field is important
         :return: default value for field
         """
-        fields = {
+        color = WARNING
+        if self.get_field_importance(field):
+            self.FAILED = True
+            color = FAIL
+        print "{0}Film:{1} {2} field failed!!{3}".format(color, self.mojo_id, field, ENDC)
+        return self.get_default_value(field)
+
+    def get_default_value(self, field):
+        """
+        Gets the default value for a field
+        :param field: field to lookup
+        :return: val
+        """
+        return self.get_field_defaults()[field]['value']
+    
+    def get_field_importance(self, field):
+        """
+        Is a field important and warrants a failure
+        :param field: field to lookup
+        :return: boolean
+        """
+        return self.get_field_defaults()[field]['important']
+
+    @staticmethod
+    def get_field_defaults():
+        """
+        Returns default field dict
+        :return: dict
+        """
+        return {
             "id": {"value": '', "important": True},
             "FAILED": {"value": True, "important": False},
             "mojo_id": {"value": '', "important": True},
@@ -139,13 +168,7 @@ class Film:
             "avg_director_film_votes": {"value": 0, "important": False},
             "max_director_film_votes": {"value": 0, "important": False}
         }
-        color = WARNING
-        if fields[field]['important']:
-            self.FAILED = True
-            color = FAIL
-        print "{0}Film:{1} {2} field failed!!{3}".format(color, self.mojo_id, field, ENDC)
-        return fields[field]['value']
-
+    
     def set_imdb_id(self):
         """
         Tries to search IMDb and find a matching film
@@ -510,7 +533,7 @@ class Film:
         :return: datetime
         """
         if not self.release_date:
-            self.release_date = self.handle_error("release_date")
+            self.release_date = self.get_default_value("release_date")
         return self.release_date
 
     def get_actors(self):
@@ -520,7 +543,7 @@ class Film:
         :return: [String]
         """
         if not self.actors:
-            self.actors = self.handle_error("actors")
+            self.actors = self.get_default_value("actors")
         return self.actors
 
     def get_revenue(self):
@@ -530,7 +553,7 @@ class Film:
         :return: int
         """
         if not self.revenue:
-            self.revenue = self.handle_error("revenue")
+            self.revenue = self.get_default_value("revenue")
         return self.revenue
 
     def get_stars(self):
@@ -540,7 +563,7 @@ class Film:
         :return: float
         """
         if not self.stars:
-            self.stars = self.handle_error("stars")
+            self.stars = self.get_default_value("stars")
         return self.stars
 
     def get_metascore(self):
@@ -550,7 +573,7 @@ class Film:
         :return: int
         """
         if not self.metascore:
-            self.metascore = self.handle_error("metascore")
+            self.metascore = self.get_default_value("metascore")
         return self.metascore
 
     def get_num_votes(self):
@@ -560,7 +583,7 @@ class Film:
         :return: int
         """
         if not self.num_votes:
-            self.num_votes = self.handle_error("num_votes")
+            self.num_votes = self.get_default_value("num_votes")
         return self.num_votes
 
     def export(self):
@@ -618,44 +641,44 @@ class Film:
         :return: nothing
         """
 
-        self.id = fields.get('id', None) or self.handle_error('id')
-        self.FAILED = fields.get('FAILED', None) or self.handle_error('FAILED')
-        self.mojo_id = fields.get('mojo_id', None) or self.handle_error('mojo_id')
-        self.mojo_title = fields.get('mojo_title', None) or self.handle_error('mojo_title')
-        self.stars = fields.get('stars', None) or self.handle_error('stars')
-        self.metascore = fields.get('metascore', None) or self.handle_error('metascore')
-        self.num_votes = fields.get('num_votes', None) or self.handle_error('num_votes')
-        self.length = fields.get('length', None) or self.handle_error('length')
-        self.mpaa = fields.get('mpaa', None) or self.handle_error('mpaa')
-        self.budget = fields.get('budget', None) or self.handle_error('budget')
-        self.release_date = fields.get('release_date', None) or self.handle_error('release_date')
-        self.month = fields.get('month', None) or self.handle_error('month')
-        self.day = fields.get('day', None) or self.handle_error('day')
-        self.weekday = fields.get('weekday', None) or self.handle_error('weekday')
-        self.revenue = fields.get('revenue', None) or self.handle_error('revenue')
-        self.director = fields.get('director', None) or self.handle_error('director')
-        self.actors = fields.get('actors', None) or self.handle_error('actors')
-        self.avg_actor_film_appearances = fields.get('avg_actor_film_appearances', None) or self.handle_error('avg_actor_film_appearances')
-        self.max_actor_film_appearances = fields.get('max_actor_film_appearances', None) or self.handle_error('max_actor_film_appearances')
-        self.director_number_of_films = fields.get('director_number_of_films', None) or self.handle_error('director_number_of_films')
-        self.avg_actor_film_revenue = fields.get('avg_actor_film_revenue', None) or self.handle_error('avg_actor_film_revenue')
-        self.max_actor_film_revenue = fields.get('max_actor_film_revenue', None) or self.handle_error('max_actor_film_revenue')
-        self.avg_director_film_revenue = fields.get('avg_director_film_revenue', None) or self.handle_error('avg_director_film_revenue')
-        self.max_director_film_revenue = fields.get('max_director_film_revenue', None) or self.handle_error('max_director_film_revenue')
-        self.avg_actor_age = fields.get('avg_actor_age', None) or self.handle_error('avg_actor_age')
-        self.director_age = fields.get('director_age', None) or self.handle_error('director_age')
-        self.avg_actor_film_stars = fields.get('avg_actor_film_stars', None) or self.handle_error('avg_actor_film_stars')
-        self.max_actor_film_stars = fields.get('max_actor_film_stars', None) or self.handle_error('max_actor_film_stars')
-        self.avg_director_film_stars = fields.get('avg_director_film_stars', None) or self.handle_error('avg_director_film_stars')
-        self.max_director_film_stars = fields.get('max_director_film_stars', None) or self.handle_error('max_director_film_stars')
-        self.avg_actor_film_metascore = fields.get('avg_actor_film_metascore', None) or self.handle_error('avg_actor_film_metascore')
-        self.max_actor_film_metascore = fields.get('max_actor_film_metascore', None) or  self.handle_error('max_actor_film_metascore')
-        self.avg_director_film_metascore = fields.get('avg_director_film_metascore', None) or self.handle_error('avg_director_film_metascore')
-        self.max_director_film_metascore = fields.get('max_director_film_metascore', None) or self.handle_error('max_director_film_metascore')
-        self.avg_actor_film_votes = fields.get('avg_actor_film_votes', None) or self.handle_error('avg_actor_film_votes')
-        self.max_actor_film_votes = fields.get('max_actor_film_votes', None) or self.handle_error('max_actor_film_votes')
-        self.avg_director_film_votes = fields.get('avg_director_film_votes', None) or self.handle_error('avg_director_film_votes')
-        self.max_director_film_votes = fields.get('max_director_film_votes', None) or self.handle_error('max_director_film_votes')
+        self.id = fields.get('id', None) or self.get_default_value('id')
+        self.FAILED = fields.get('FAILED', None) or self.get_default_value('FAILED')
+        self.mojo_id = fields.get('mojo_id', None) or self.get_default_value('mojo_id')
+        self.mojo_title = fields.get('mojo_title', None) or self.get_default_value('mojo_title')
+        self.stars = fields.get('stars', None) or self.get_default_value('stars')
+        self.metascore = fields.get('metascore', None) or self.get_default_value('metascore')
+        self.num_votes = fields.get('num_votes', None) or self.get_default_value('num_votes')
+        self.length = fields.get('length', None) or self.get_default_value('length')
+        self.mpaa = fields.get('mpaa', None) or self.get_default_value('mpaa')
+        self.budget = fields.get('budget', None) or self.get_default_value('budget')
+        self.release_date = fields.get('release_date', None) or self.get_default_value('release_date')
+        self.month = fields.get('month', None) or self.get_default_value('month')
+        self.day = fields.get('day', None) or self.get_default_value('day')
+        self.weekday = fields.get('weekday', None) or self.get_default_value('weekday')
+        self.revenue = fields.get('revenue', None) or self.get_default_value('revenue')
+        self.director = fields.get('director', None) or self.get_default_value('director')
+        self.actors = fields.get('actors', None) or self.get_default_value('actors')
+        self.avg_actor_film_appearances = fields.get('avg_actor_film_appearances', None) or self.get_default_value('avg_actor_film_appearances')
+        self.max_actor_film_appearances = fields.get('max_actor_film_appearances', None) or self.get_default_value('max_actor_film_appearances')
+        self.director_number_of_films = fields.get('director_number_of_films', None) or self.get_default_value('director_number_of_films')
+        self.avg_actor_film_revenue = fields.get('avg_actor_film_revenue', None) or self.get_default_value('avg_actor_film_revenue')
+        self.max_actor_film_revenue = fields.get('max_actor_film_revenue', None) or self.get_default_value('max_actor_film_revenue')
+        self.avg_director_film_revenue = fields.get('avg_director_film_revenue', None) or self.get_default_value('avg_director_film_revenue')
+        self.max_director_film_revenue = fields.get('max_director_film_revenue', None) or self.get_default_value('max_director_film_revenue')
+        self.avg_actor_age = fields.get('avg_actor_age', None) or self.get_default_value('avg_actor_age')
+        self.director_age = fields.get('director_age', None) or self.get_default_value('director_age')
+        self.avg_actor_film_stars = fields.get('avg_actor_film_stars', None) or self.get_default_value('avg_actor_film_stars')
+        self.max_actor_film_stars = fields.get('max_actor_film_stars', None) or self.get_default_value('max_actor_film_stars')
+        self.avg_director_film_stars = fields.get('avg_director_film_stars', None) or self.get_default_value('avg_director_film_stars')
+        self.max_director_film_stars = fields.get('max_director_film_stars', None) or self.get_default_value('max_director_film_stars')
+        self.avg_actor_film_metascore = fields.get('avg_actor_film_metascore', None) or self.get_default_value('avg_actor_film_metascore')
+        self.max_actor_film_metascore = fields.get('max_actor_film_metascore', None) or  self.get_default_value('max_actor_film_metascore')
+        self.avg_director_film_metascore = fields.get('avg_director_film_metascore', None) or self.get_default_value('avg_director_film_metascore')
+        self.max_director_film_metascore = fields.get('max_director_film_metascore', None) or self.get_default_value('max_director_film_metascore')
+        self.avg_actor_film_votes = fields.get('avg_actor_film_votes', None) or self.get_default_value('avg_actor_film_votes')
+        self.max_actor_film_votes = fields.get('max_actor_film_votes', None) or self.get_default_value('max_actor_film_votes')
+        self.avg_director_film_votes = fields.get('avg_director_film_votes', None) or self.get_default_value('avg_director_film_votes')
+        self.max_director_film_votes = fields.get('max_director_film_votes', None) or self.get_default_value('max_director_film_votes')
 
     def purge(self):
         """
@@ -711,7 +734,7 @@ class Film:
                 max_stat = val
             if val < min_stat:
                 min_stat = val
-        return {"sum": sum_stat, "max": max_stat, "min": min_stat, "avg": sum_stat / length}
+        return {"sum": sum_stat, "max": max_stat, "min": min_stat, "avg": sum_stat / max(1, length)}
 
     def set_aggregate_fields(self):
         """
