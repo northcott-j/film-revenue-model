@@ -465,6 +465,8 @@ class Film:
             self.set_mojo_page()
         try:
             possible_divs = self.mojo_page.find_all('div', {'class':"mp_box_content"})
+            # Keep track of Domestic if needed
+            domestic_revenue = 0
             for div in possible_divs:
                 if "Worldwide:" in div.text:
                     tds = div.find_all('td')
@@ -478,7 +480,25 @@ class Film:
                             self.revenue = int(revenue)
                             break
                         previous = td
-                    break
+                if "Domestic:" in div.text:
+                    tds = div.find_all('td')
+                    previous = None
+                    for td in tds:
+                        if '$' in td.text and "Domestic:" in previous.text:
+                            revenue = ''
+                            for c in td.text:
+                                if c.isdigit():
+                                    revenue += c
+                            domestic_revenue = int(revenue)
+                            break
+                        previous = td
+            # If Worldwide revenue is None or 0, set domestic if possible
+            if self.revenue:
+                return self.revenue
+            elif domestic_revenue:
+                self.revenue = domestic_revenue
+            else:
+                self.revenue = self.handle_error('revenue')
         except:
             self.revenue = self.handle_error('revenue')
         return self.revenue
