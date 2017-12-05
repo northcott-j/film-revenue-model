@@ -15,18 +15,15 @@ output: html_notebook
 <a target="_blank" href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-three.html">Python Scraping Day Three</a><br><br>
 Summary:<br>
 <p>I ran into a bunch of issues while scraping the data. Those three blog posts show what I worked on each day and some of the problems that I ran into. I tried to update them live with my exact thoughts and how I worked through, or avoided, the problems that came up with Data Prepartion.</p><br>
-<a target="_blank" href="http://blog.jdnorthcott.com/2017/12/improvements-for-future-updates.html">Improvements</a><br>
 
 <strong>Modeling</strong><br>
-Backwards fitting
-
-Evaluation
-Fit
-Test Methods
-Test Results
+<p>I backwards fit my model. I removed the features in this order: avg_actor_film_votes, max_actor_film_stars, max_director_film_votes, avg_director_film_metascore, max_director_film_metascore, max_actor_film_metascore, day, avg_actor_film_metascore, avg_director_film_stars, month-avg_actor_age.</p><br>
+<p>In the end, the model was useless. I tested both with a 50/50 split and a 30/70 split and both times, the average error was ~$45 million. The R^2 was about a .25.</p><br>
+<p>If I had more time, I'd create 2+ models. One for low budget movies and another for high budget movies. The data I scraped was very, very skewed to the lower budget/lower revenue area. It definitely needs a second model.</p>
 
 <strong>Deployment</strong><br>
-<p>I created a script that people can use to run the model. They need to have Python2.7 installed. Follow the directions in the README to use it. There is info on how to build the model from scratch as well in the README. I also have a blog post of potential improvements.</p>
+<p>I created a script that people can use to run the model. They need to have Python2.7 installed. Follow the directions in the README to use it. There is info on how to build the model from scratch as well in the README. I also have a blog post of potential improvements.</p><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/12/improvements-for-future-updates.html">Improvements</a><br>
 
 <strong>Loading RMongo and linking to local database</strong>
 ```{r}
@@ -46,9 +43,12 @@ mojo_title<br>
 stars<br>
 metascore<br>
 num_votes<br>
+director<br>
+actors<br>
+release_date<br>
 ```{r}
-films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}") 
-films <- subset(films, select = -c(X_id, id, FAILED, mojo_id, mojo_title, stars, metascore, num_votes))
+films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}", 0, 15000) 
+films <- subset(films, select = -c(X_id, id, FAILED, mojo_id, mojo_title, stars, metascore, num_votes, director, actors, release_date))
 ```
 
 <strong>Map all Distinct MPAA values and create a "dictionary"</strong>
@@ -93,6 +93,7 @@ mpaa.mapping('XXX') # 0
 string_ratings <- films$mpaa
 string_ints <- sapply(string_ratings, mpaa.mapping)
 films$mpaa_num <- string_ints
+films <- subset(films, select = -c(mpaa))
 ```
 
 <strong>Fix Directors Age (negative or 0 values)</strong>
@@ -109,6 +110,12 @@ films$director_age <- adjusted_ages
 ```{r}
 require(psych)
 pairs.panels(films)
+```
+
+<strong>Histogram of Important Values</strong>
+```{r}
+# hist(films$revenue)
+# hist(films$budget)
 ```
 
 
@@ -192,7 +199,7 @@ avg_director_film_metascore<br>
 </p>
 
 ```{r}
-revenue.lm <- lm(revenue ~ ., data=films)
+revenue.lm <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=films)
 summary(revenue.lm)
 
 ```
@@ -205,20 +212,20 @@ train.50.50 <- films[train.rows.50.50,]
 test.50.50 <- films[-train.rows.50.50,]
 
 train.rows.30.70 <- sample(1:nrow(films), round(nrow(films) / 3.33), replace=F)
-train.30.70 <- films[test.df.30.70,]
-test.30.70 <- films[-test.df.30.70,]
+train.30.70 <- films[train.rows.30.70,]
+test.30.70 <- films[-train.rows.30.70,]
 ```
 
 <strong>Building the two test models</strong>
 ```{r}
-lm.50.50 <- lm(revenue ~ ., data=train.50.50)
-lm.30.70 <- lm(revenue ~ ., data=train.30.70)
+lm.50.50 <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=train.50.50)
+lm.30.70 <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=train.30.70)
 ```
 
 <strong>Running the tests</strong>
 ```{r}
-results.50.50 <- apply(test.50.50,1,function (x) predict(lm.50.50, x))
-results.30.70 <- apply(test.30.70,1,function (x) predict(lm.30.70, x))
+results.50.50 <- sapply(1:nrow(test.50.50),function (r) predict(lm.50.50, test.50.50[r,]))
+results.30.70 <- sapply(1:nrow(test.30.70),function (r) predict(lm.30.70, test.30.70[r,]))
 ```
 
 <strong>Checking % correct of both model tests</strong>
