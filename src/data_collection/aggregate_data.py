@@ -11,7 +11,7 @@ def import_actors(db):
     :param db: db connection
     :return: queue of actors
     """
-    actors = db['actors'].find({})
+    actors = db['actors'].find({'FAILED': False})
     return_q = Queue()
     for a in actors:
         created_a = Actor(a['id'], a['DIRECTOR'])
@@ -26,7 +26,7 @@ def import_films(db):
     :param db: db connection
     :return: queue of films
     """
-    films = db['films'].find({})
+    films = db['films'].find({'FAILED': False})
     return_q = Queue()
     for f in films:
         # I didn't save mojo_year so passing None
