@@ -20,7 +20,7 @@ class Film:
         # The year from Box Office Mojo scrape to help filter IMDb results  !important
         self.mojo_year = str(mojo_year)
         # The Title found on Box Office Mojo                                !important
-        self.mojo_title = mojo_title
+        self.mojo_title = mojo_title.encode('utf-8')
         # The ID of the movie on IMDb (will be used as primary id)          !important
         self.id = ''
         # HTML of the IMDb page                                             !important
