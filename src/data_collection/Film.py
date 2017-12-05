@@ -649,9 +649,20 @@ class Film:
         :return: an Actor
         """
         if actor_id == self.director:
-            return Actor.Actor.all_actors.get("director-{0}".format(actor_id), Actor.Actor('NonsenseActorId', False))
+            retrieve_id = "director-{0}".format(actor_id)
+            director = True
         else:
-            Actor.Actor.all_actors.get(actor_id, Actor.Actor('NonsenseActorId', False))
+            retrieve_id = actor_id
+            director = False
+
+        default = Actor.Actor('NonsenseActorId', director)
+        if Actor.Actor.all_actors.get(retrieve_id, None):
+            if Actor.Actor.all_actors[retrieve_id].FAILED:
+                return default
+            else:
+                return Actor.Actor.all_actors[retrieve_id]
+        else:
+            return default
 
     def get_actor_stats(self, func):
         """

@@ -185,7 +185,14 @@ class Actor:
         :param film_id: string id of a film
         :return: a Film
         """
-        return Film.Film.all_films.get(film_id, Film.Film('NonsenseFilmId', 'No Title', '3000'))
+        default = Film.Film('NonsenseFilmId', 'No Title', '3000')
+        if Film.Film.all_films.get(film_id, None):
+            if Film.Film.all_films[film_id].FAILED:
+                return default
+            else:
+                return Film.Film.all_films[film_id]
+        else:
+            return default
 
     def sort_films(self):
         """
