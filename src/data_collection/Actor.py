@@ -37,6 +37,8 @@ class Actor:
         """
         fields = {
             "id": {"value": '', "important": True},
+            "FAILED": {"value": True, "important": False},
+            "DIRECTOR": {"value": False, "important": False},
             "imdb_page": {"value": BeautifulSoup("", "html.parser"), "important": True},
             "name": {"value": '', "important": False},
             "birthday": {"value": datetime.datetime(3000, 1, 1), "important": True},
@@ -163,12 +165,12 @@ class Actor:
         :mutate all fields: every field is updated
         :return: nothing
         """
-        self.id = fields.get('id', self.handle_error('id'))
-        self.FAILED = fields.get('FAILED', self.handle_error('FAILED'))
-        self.DIRECTOR = fields.get('DIRECTOR', self.handle_error('DIRECTOR'))
-        self.name = fields.get('name', self.handle_error('name'))
-        self.birthday = fields.get('birthday', self.handle_error('birthday'))
-        self.films = fields.get('films', self.handle_error('films'))
+        self.id = fields.get('id', None) or self.handle_error('id')
+        self.FAILED = fields.get('FAILED', None) or self.handle_error('FAILED')
+        self.DIRECTOR = fields.get('DIRECTOR', None) or self.handle_error('DIRECTOR')
+        self.name = fields.get('name', None) or self.handle_error('name')
+        self.birthday = fields.get('birthday', None) or self.handle_error('birthday')
+        self.films = fields.get('films', None) or self.handle_error('films')
 
     def purge(self):
         """

@@ -98,6 +98,10 @@ class Film:
         """
         fields = {
             "id": {"value": '', "important": True},
+            "FAILED": {"value": True, "important": False},
+            "mojo_id": {"value": '', "important": True},
+            "mojo_title": {"value": '', "important": False},
+            "mojo_year": {"value": 3000, "important": False},
             "imdb_page": {"value": BeautifulSoup("", "html.parser"), "important": True},
             "mojo_page": {"value": BeautifulSoup("", "html.parser"), "important": True},
             "stars": {"value": 0.0, "important": False},
@@ -594,44 +598,44 @@ class Film:
         :return: nothing
         """
 
-        self.id = fields.get('id', self.handle_error('id'))
-        self.FAILED = fields.get('FAILED', self.handle_error('FAILED'))
-        self.mojo_id = fields.get('mojo_id', self.handle_error('mojo_id'))
-        self.mojo_title = fields.get('mojo_title', self.handle_error('mojo_title'))
-        self.stars = fields.get('stars', self.handle_error('stars'))
-        self.metascore = fields.get('metascore', self.handle_error('metascore'))
-        self.num_votes = fields.get('num_votes', self.handle_error('num_votes'))
-        self.length = fields.get('length', self.handle_error('length'))
-        self.mpaa = fields.get('mpaa', self.handle_error('mpaa'))
-        self.budget = fields.get('budget', self.handle_error('budget'))
-        self.release_date = fields.get('release_date', self.handle_error('release_date'))
-        self.month = fields.get('month', self.handle_error('month'))
-        self.day = fields.get('day', self.handle_error('day'))
-        self.weekday = fields.get('weekday', self.handle_error('weekday'))
-        self.revenue = fields.get('revenue', self.handle_error('revenue'))
-        self.director = fields.get('director', self.handle_error('director'))
-        self.actors = fields.get('actors', self.handle_error('actors'))
-        self.avg_actor_film_appearances = fields.get('avg_actor_film_appearances', self.handle_error('avg_actor_film_appearances'))
-        self.max_actor_film_appearances = fields.get('max_actor_film_appearances', self.handle_error('max_actor_film_appearances'))
-        self.director_number_of_films = fields.get('director_number_of_films', self.handle_error('director_number_of_films'))
-        self.avg_actor_film_revenue = fields.get('avg_actor_film_revenue', self.handle_error('avg_actor_film_revenue'))
-        self.max_actor_film_revenue = fields.get('max_actor_film_revenue', self.handle_error('max_actor_film_revenue'))
-        self.avg_director_film_revenue = fields.get('avg_director_film_revenue', self.handle_error('avg_director_film_revenue'))
-        self.max_director_film_revenue = fields.get('max_director_film_revenue', self.handle_error('max_director_film_revenue'))
-        self.avg_actor_age = fields.get('avg_actor_age', self.handle_error('avg_actor_age'))
-        self.director_age = fields.get('director_age', self.handle_error('director_age'))
-        self.avg_actor_film_stars = fields.get('avg_actor_film_stars', self.handle_error('avg_actor_film_stars'))
-        self.max_actor_film_stars = fields.get('max_actor_film_stars', self.handle_error('max_actor_film_stars'))
-        self.avg_director_film_stars = fields.get('avg_director_film_stars', self.handle_error('avg_director_film_stars'))
-        self.max_director_film_stars = fields.get('max_director_film_stars', self.handle_error('max_director_film_stars'))
-        self.avg_actor_film_metascore = fields.get('avg_actor_film_metascore', self.handle_error('avg_actor_film_metascore'))
-        self.max_actor_film_metascore = fields.get('max_actor_film_metascore', self.handle_error('max_actor_film_metascore'))
-        self.avg_director_film_metascore = fields.get('avg_director_film_metascore', self.handle_error('avg_director_film_metascore'))
-        self.max_director_film_metascore = fields.get('max_director_film_metascore', self.handle_error('max_director_film_metascore'))
-        self.avg_actor_film_votes = fields.get('avg_actor_film_votes', self.handle_error('avg_actor_film_votes'))
-        self.max_actor_film_votes = fields.get('max_actor_film_votes', self.handle_error('max_actor_film_votes'))
-        self.avg_director_film_votes = fields.get('avg_director_film_votes', self.handle_error('avg_director_film_votes'))
-        self.max_director_film_votes = fields.get('max_director_film_votes', self.handle_error('max_director_film_votes'))
+        self.id = fields.get('id', None) or self.handle_error('id')
+        self.FAILED = fields.get('FAILED', None) or self.handle_error('FAILED')
+        self.mojo_id = fields.get('mojo_id', None) or self.handle_error('mojo_id')
+        self.mojo_title = fields.get('mojo_title', None) or self.handle_error('mojo_title')
+        self.stars = fields.get('stars', None) or self.handle_error('stars')
+        self.metascore = fields.get('metascore', None) or self.handle_error('metascore')
+        self.num_votes = fields.get('num_votes', None) or self.handle_error('num_votes')
+        self.length = fields.get('length', None) or self.handle_error('length')
+        self.mpaa = fields.get('mpaa', None) or self.handle_error('mpaa')
+        self.budget = fields.get('budget', None) or self.handle_error('budget')
+        self.release_date = fields.get('release_date', None) or self.handle_error('release_date')
+        self.month = fields.get('month', None) or self.handle_error('month')
+        self.day = fields.get('day', None) or self.handle_error('day')
+        self.weekday = fields.get('weekday', None) or self.handle_error('weekday')
+        self.revenue = fields.get('revenue', None) or self.handle_error('revenue')
+        self.director = fields.get('director', None) or self.handle_error('director')
+        self.actors = fields.get('actors', None) or self.handle_error('actors')
+        self.avg_actor_film_appearances = fields.get('avg_actor_film_appearances', None) or self.handle_error('avg_actor_film_appearances')
+        self.max_actor_film_appearances = fields.get('max_actor_film_appearances', None) or self.handle_error('max_actor_film_appearances')
+        self.director_number_of_films = fields.get('director_number_of_films', None) or self.handle_error('director_number_of_films')
+        self.avg_actor_film_revenue = fields.get('avg_actor_film_revenue', None) or self.handle_error('avg_actor_film_revenue')
+        self.max_actor_film_revenue = fields.get('max_actor_film_revenue', None) or self.handle_error('max_actor_film_revenue')
+        self.avg_director_film_revenue = fields.get('avg_director_film_revenue', None) or self.handle_error('avg_director_film_revenue')
+        self.max_director_film_revenue = fields.get('max_director_film_revenue', None) or self.handle_error('max_director_film_revenue')
+        self.avg_actor_age = fields.get('avg_actor_age', None) or self.handle_error('avg_actor_age')
+        self.director_age = fields.get('director_age', None) or self.handle_error('director_age')
+        self.avg_actor_film_stars = fields.get('avg_actor_film_stars', None) or self.handle_error('avg_actor_film_stars')
+        self.max_actor_film_stars = fields.get('max_actor_film_stars', None) or self.handle_error('max_actor_film_stars')
+        self.avg_director_film_stars = fields.get('avg_director_film_stars', None) or self.handle_error('avg_director_film_stars')
+        self.max_director_film_stars = fields.get('max_director_film_stars', None) or self.handle_error('max_director_film_stars')
+        self.avg_actor_film_metascore = fields.get('avg_actor_film_metascore', None) or self.handle_error('avg_actor_film_metascore')
+        self.max_actor_film_metascore = fields.get('max_actor_film_metascore', None) or  self.handle_error('max_actor_film_metascore')
+        self.avg_director_film_metascore = fields.get('avg_director_film_metascore', None) or self.handle_error('avg_director_film_metascore')
+        self.max_director_film_metascore = fields.get('max_director_film_metascore', None) or self.handle_error('max_director_film_metascore')
+        self.avg_actor_film_votes = fields.get('avg_actor_film_votes', None) or self.handle_error('avg_actor_film_votes')
+        self.max_actor_film_votes = fields.get('max_actor_film_votes', None) or self.handle_error('max_actor_film_votes')
+        self.avg_director_film_votes = fields.get('avg_director_film_votes', None) or self.handle_error('avg_director_film_votes')
+        self.max_director_film_votes = fields.get('max_director_film_votes', None) or self.handle_error('max_director_film_votes')
 
     def purge(self):
         """

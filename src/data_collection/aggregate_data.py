@@ -29,9 +29,9 @@ def import_films(db):
     films = db['films'].find({})
     return_q = Queue()
     for f in films:
-        # I didn't save mojo_year so using a random number
+        # I didn't save mojo_year so passing None
         # It isn't important as these films were already saved
-        created_f = Film(f['mojo_id'], f['mojo_title'], 2017)
+        created_f = Film(f['mojo_id'], f['mojo_title'], None)
         created_f.import_fields(f)
         return_q.put(created_f)
     return return_q
