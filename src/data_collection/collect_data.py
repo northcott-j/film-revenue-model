@@ -70,7 +70,7 @@ def get_all_film_people(db):
         if director not in unique_people:
             peoples.append({'id': f.get('director', ''), 'DIRECTOR': True})
             unique_people.add(director)
-        for a in films.get('actors', []):
+        for a in f.get('actors', []):
             if a not in unique_people:
                 peoples.append({'id': a, 'DIRECTOR': False})
                 unique_people.add(a)
