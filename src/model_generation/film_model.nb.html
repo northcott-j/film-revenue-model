@@ -178,7 +178,7 @@ $(document).ready(function () {
 <p><strong>Modeling</strong><br> Backwards fitting</p>
 <p>Evaluation Fit Test Methods Test Results</p>
 <p><strong>Deployment</strong><br> Save co-efficients in Python script People can run themselves</p>
-<p>Loading RMongo and linking to local database</p>
+<p><strong>Loading RMongo and linking to local database</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVxdWlyZShSTW9uZ28pXG5tZzEgPC0gbW9uZ29EYkNvbm5lY3QoJ2RzNDEwMCcpXG5kYlNob3dDb2xsZWN0aW9ucyhtZzEpXG5gYGAifQ== -->
@@ -191,58 +191,113 @@ dbShowCollections(mg1)</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Building the data.frame</p>
+<p><strong>Building the data.frame</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsbXMgPC0gZGJHZXRRdWVyeShtZzEsICdmaWxtcycsIFwieydGQUlMRUQnOiBmYWxzZX1cIikgXG5hY3RvcnMgPC0gZGJHZXRRdWVyeShtZzEsICdhY3RvcnMnLCBcInsnRkFJTEVEJzogZmFsc2V9XCIpXG5gYGAifQ== -->
-<pre class="r"><code>films &lt;- dbGetQuery(mg1, 'films', &quot;{'FAILED': false}&quot;) 
-actors &lt;- dbGetQuery(mg1, 'actors', &quot;{'FAILED': false}&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsbXMgPC0gZGJHZXRRdWVyeShtZzEsICdmaWxtcycsIFwieydGQUlMRUQnOiBmYWxzZX1cIikgXG5gYGAifQ== -->
+<pre class="r"><code>films &lt;- dbGetQuery(mg1, 'films', &quot;{'FAILED': false}&quot;) </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Get all Distinct MPAA values</p>
+<p><strong>Map all Distinct MPAA values and create a “dictionary”</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXBhYS5kaXN0aW5jdCA8LSBkYkdldERpc3RpbmN0KG1nMSwgJ2ZpbG1zJywgXCJtcGFhXCIsIFwie31cIikgXG5gYGAifQ== -->
-<pre class="r"><code>mpaa.distinct &lt;- dbGetDistinct(mg1, 'films', &quot;mpaa&quot;, &quot;{}&quot;) </code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI21wYWEuZGlzdGluY3QgPC0gZGJHZXREaXN0aW5jdChtZzEsICdmaWxtc19hZ2cnLCBcIm1wYWFcIiwgXCJ7fVwiKSBcbiMgQW55IG5vbi1zZW5zZSB2YWx1ZXMgd2lsbCBiZSAwXG4jIEdvIGZyb20gRyAtPiBOQy0xNyBiZWluZyAxIC0gblxuIyBEZWZhdWx0IHZhbHVlIHRvIHJldHVybiBpZiBzdHJpbmcgaXMgc29tZXRoaW5nIHJhbmRvbVxubXBhYS5pbnQuZGVmYXVsdCA8LSAwXG5tcGFhLnN0cmluZ3MgPC0gYyhcbiAgICBcIk5DLTE3XCIsXG4gICAgXCJSXCIsXG4gICAgXCJQRy0xM1wiLFxuICAgIFwiTS9QR1wiLFxuICAgIFwiUEdcIixcbiAgICBcIlBBU1NFRFwiLFxuICAgIFwiR1wiXG4pXG5tcGFhLmludHMgPC0gYygxOjcpXG4jIFNldHRpbmcgdGhlIG5hbWVzIG9mIHRoZSBpbnRzIHRvIHRoZSBjb3JyZXNwb25kaW5nIHJhdGluZ3Ncbm5hbWVzKG1wYWEuaW50cykgPC0gbXBhYS5zdHJpbmdzXG4jIFRlc3QgaXQgb3V0XG5tcGFhLmludHNbJ1InXVxuYGBgIn0= -->
+<pre class="r"><code>#mpaa.distinct &lt;- dbGetDistinct(mg1, 'films_agg', &quot;mpaa&quot;, &quot;{}&quot;) 
+# Any non-sense values will be 0
+# Go from G -&gt; NC-17 being 1 - n
+# Default value to return if string is something random
+mpaa.int.default &lt;- 0
+mpaa.strings &lt;- c(
+    &quot;NC-17&quot;,
+    &quot;R&quot;,
+    &quot;PG-13&quot;,
+    &quot;M/PG&quot;,
+    &quot;PG&quot;,
+    &quot;PASSED&quot;,
+    &quot;G&quot;
+)
+mpaa.ints &lt;- c(1:7)
+# Setting the names of the ints to the corresponding ratings
+names(mpaa.ints) &lt;- mpaa.strings
+# Test it out
+mpaa.ints['R']</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUiBcbjIgXG4ifQ== -->
+<pre><code>R 
+2 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>Write a function to remap MPAA values to a number</strong></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBUYWtlcyBhIHN0cmluZyByYXRpbmcgYW5kIHJldHVybnMgYW4gaW50XG5tcGFhLm1hcHBpbmc8LWZ1bmN0aW9uKHJhdGluZykge1xuICBpZiAocmF0aW5nICVpbiUgbXBhYS5zdHJpbmdzKSB7XG4gICAgcmV0dXJuKG1wYWEuaW50c1tyYXRpbmddKVxuICB9IGVsc2Uge1xuICAgIHJldHVybihtcGFhLmludC5kZWZhdWx0KVxuICB9XG59XG5tcGFhLm1hcHBpbmcoJ1InKSAgICMgMlxuYGBgIn0= -->
+<pre class="r"><code># Takes a string rating and returns an int
+mpaa.mapping&lt;-function(rating) {
+  if (rating %in% mpaa.strings) {
+    return(mpaa.ints[rating])
+  } else {
+    return(mpaa.int.default)
+  }
+}
+mpaa.mapping('R')   # 2</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUiBcbjIgXG4ifQ== -->
+<pre><code>R 
+2 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXBhYS5tYXBwaW5nKCdYWFgnKSAjIDBcbmBgYCJ9 -->
+<pre class="r"><code>mpaa.mapping('XXX') # 0</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>Create new column in data.frame with mpaa ints</strong></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyaW5nX3JhdGluZ3MgPC0gZmlsbXMkbXBhYVxuc3RyaW5nX2ludHMgPC0gc2FwcGx5KHN0cmluZ19yYXRpbmdzLCBtcGFhLm1hcHBpbmcpXG5maWxtcyRtcGFhX251bSA8LSBzdHJpbmdfaW50c1xuYGBgIn0= -->
+<pre class="r"><code>string_ratings &lt;- films$mpaa
+string_ints &lt;- sapply(string_ratings, mpaa.mapping)
+films$mpaa_num &lt;- string_ints</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Write a function to remap MPAA values to a number</p>
+<strong>Possible fields to be included in the model. Going to use backwards fitting to design the model<br></strong>
+<p>
+<p>revenue<br> |<br> v<br> FILM SPECIFIC<br> weekday<br> day<br> month<br> budget<br> length<br> mpaa_num<br> director_age<br> avg_actor_age<br></p>
+<p>ACTOR SPECIFIC <br> max_actor_film_revenue<br> avg_actor_film_revenue<br> max_actor_film_votes<br> avg_actor_film_votes<br> max_actor_film_stars<br> avg_actor_film_stars<br> max_actor_film_appearances<br> avg_actor_film_appearances<br> max_actor_film_metascore<br> avg_actor_film_metascore<br></p>
+DIRECTOR SPECIFIC<br> director_number_of_films<br> max_director_film_revenue<br> avg_director_film_revenue<br> max_director_film_votes<br> avg_director_film_votes<br> max_director_film_stars<br> avg_director_film_stars<br> max_director_film_metascore<br> avg_director_film_metascore<br>
+</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Possible fields to be included in the model. Going to use backwards fitting to design the model revenue | v FILM SPECIFIC weekday day month budget length mpaa_num director_age avg_actor_age</p>
-<p>ACTOR SPECIFIC max_actor_film_revenue avg_actor_film_revenue max_actor_film_votes avg_actor_film_votes max_actor_film_stars avg_actor_film_stars max_actor_film_appearances avg_actor_film_appearances max_actor_film_metascore avg_actor_film_metascore</p>
-<p>DIRECTOR SPECIFIC director_number_of_films max_director_film_revenue avg_director_film_revenue max_director_film_votes avg_director_film_votes max_director_film_stars avg_director_film_stars max_director_film_metascore avg_director_film_metascore</p>
+<p><strong>Divide data into training and test</strong> <strong>Using a random 50/50 and 30/70 split</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Divide data into training and test Using a random 50/50 and 30/70 split</p>
+<p><strong>Building the two test models</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Building the two test models</p>
+<p><strong>Running the tests</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Running the tests</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Checking % correct of both model tests</p>
+<p><strong>Checking % correct of both model tests</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbG0gUmV2ZW51ZSBNb2RlbCINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQo8c3Ryb25nPkJ1c2luZXNzIHVuZGVyc3RhbmRpbmc8L3N0cm9uZz48YnI+DQo8YSBocmVmPSJodHRwOi8vYmxvZy5qZG5vcnRoY290dC5jb20vMjAxNy8xMS9yZWFkeS1zZXQtZ28uaHRtbCI+UHJvamVjdCBBYm91dDwvYT48YnI+PGJyPg0KDQo8c3Ryb25nPkRhdGEgdW5kZXJzdGFuZGluZzwvc3Ryb25nPjxicj4NCjxhIGhyZWY9Imh0dHA6Ly9ibG9nLmpkbm9ydGhjb3R0LmNvbS8yMDE3LzExL3B5dGhvbi1zY3JhcGVyLWJyYWluLWR1bXAuaHRtbCI+SW5pdGFsIEJyYWluIER1bXAgb2YgUHl0aG9uPC9hPjxicj4NCjxhIGhyZWY9Imh0dHA6Ly9ibG9nLmpkbm9ydGhjb3R0LmNvbS8yMDE3LzExL3ItYnJhaW4tZHVtcC5odG1sIj5Jbml0aWFsIEJyYWluIER1bXAgb2YgUjwvYT48YnI+PGJyPg0KDQo8c3Ryb25nPkRhdGEgcHJlcGFyYXRpb248L3N0cm9uZz48YnI+DQo8YSBocmVmPSJodHRwOi8vYmxvZy5qZG5vcnRoY290dC5jb20vMjAxNy8xMS9pbXBsZW1lbnRpbmctcHl0aG9uLXNjcmFwZXIuaHRtbCI+UHl0aG9uIFNjcmFwaW5nIERheSBPbmU8L2E+PGJyPg0KPGEgaHJlZj0iaHR0cDovL2Jsb2cuamRub3J0aGNvdHQuY29tLzIwMTcvMTIvaW1wbGVtZW50aW5nLXB5dGhvbi1zY3JhcGVyLWRheS10d28uaHRtbCI+UHl0aG9uIFNjcmFwaW5nIERheSBUd288L2E+PGJyPg0KPGEgaHJlZj0iaHR0cDovL2Jsb2cuamRub3J0aGNvdHQuY29tLzIwMTcvMTIvaW1wbGVtZW50aW5nLXB5dGhvbi1zY3JhcGVyLWRheS10aHJlZS5odG1sIj5QeXRob24gU2NyYXBpbmcgRGF5IFRocmVlPC9hPjxicj48YnI+DQpTdW1tYXJ5Og0KDQo8c3Ryb25nPk1vZGVsaW5nPC9zdHJvbmc+PGJyPg0KQmFja3dhcmRzIGZpdHRpbmcNCg0KRXZhbHVhdGlvbg0KRml0DQpUZXN0IE1ldGhvZHMNClRlc3QgUmVzdWx0cw0KDQo8c3Ryb25nPkRlcGxveW1lbnQ8L3N0cm9uZz48YnI+DQpTYXZlIGNvLWVmZmljaWVudHMgaW4gUHl0aG9uIHNjcmlwdA0KUGVvcGxlIGNhbiBydW4gdGhlbXNlbHZlcyANCg0KTG9hZGluZyBSTW9uZ28gYW5kIGxpbmtpbmcgdG8gbG9jYWwgZGF0YWJhc2UNCmBgYHtyfQ0KcmVxdWlyZShSTW9uZ28pDQptZzEgPC0gbW9uZ29EYkNvbm5lY3QoJ2RzNDEwMCcpDQpkYlNob3dDb2xsZWN0aW9ucyhtZzEpDQpgYGANCg0KDQpCdWlsZGluZyB0aGUgZGF0YS5mcmFtZQ0KYGBge3J9DQpmaWxtcyA8LSBkYkdldFF1ZXJ5KG1nMSwgJ2ZpbG1zX2FnZycsICJ7J0ZBSUxFRCc6IGZhbHNlfSIpIA0KYGBgDQoNCkdldCBhbGwgRGlzdGluY3QgTVBBQSB2YWx1ZXMNCmBgYHtyfQ0KbXBhYS5kaXN0aW5jdCA8LSBkYkdldERpc3RpbmN0KG1nMSwgJ2ZpbG1zX2FnZycsICJtcGFhIiwgInt9IikgDQojIEFueSBub24tc2Vuc2UgdmFsdWVzIHdpbGwgYmUgMA0KIyBHbyBmcm9tIEcgLT4gUiBiZWluZyAxIC0gbg0KYGBgDQoNCldyaXRlIGEgZnVuY3Rpb24gdG8gcmVtYXAgTVBBQSB2YWx1ZXMgdG8gYSBudW1iZXINCmBgYHtyfQ0KDQpgYGANCg0KUG9zc2libGUgZmllbGRzIHRvIGJlIGluY2x1ZGVkIGluIHRoZSBtb2RlbC4gR29pbmcgdG8gdXNlIGJhY2t3YXJkcyBmaXR0aW5nIHRvIGRlc2lnbiB0aGUgbW9kZWwNCnJldmVudWUNCnwNCnYNCkZJTE0gU1BFQ0lGSUMNCndlZWtkYXkNCmRheQ0KbW9udGgNCmJ1ZGdldA0KbGVuZ3RoDQptcGFhX251bQ0KZGlyZWN0b3JfYWdlDQphdmdfYWN0b3JfYWdlDQoNCkFDVE9SIFNQRUNJRklDIA0KbWF4X2FjdG9yX2ZpbG1fcmV2ZW51ZQ0KYXZnX2FjdG9yX2ZpbG1fcmV2ZW51ZQ0KbWF4X2FjdG9yX2ZpbG1fdm90ZXMNCmF2Z19hY3Rvcl9maWxtX3ZvdGVzDQptYXhfYWN0b3JfZmlsbV9zdGFycw0KYXZnX2FjdG9yX2ZpbG1fc3RhcnMNCm1heF9hY3Rvcl9maWxtX2FwcGVhcmFuY2VzDQphdmdfYWN0b3JfZmlsbV9hcHBlYXJhbmNlcw0KbWF4X2FjdG9yX2ZpbG1fbWV0YXNjb3JlDQphdmdfYWN0b3JfZmlsbV9tZXRhc2NvcmUNCg0KRElSRUNUT1IgU1BFQ0lGSUMNCmRpcmVjdG9yX251bWJlcl9vZl9maWxtcw0KbWF4X2RpcmVjdG9yX2ZpbG1fcmV2ZW51ZQ0KYXZnX2RpcmVjdG9yX2ZpbG1fcmV2ZW51ZQ0KbWF4X2RpcmVjdG9yX2ZpbG1fdm90ZXMNCmF2Z19kaXJlY3Rvcl9maWxtX3ZvdGVzDQptYXhfZGlyZWN0b3JfZmlsbV9zdGFycw0KYXZnX2RpcmVjdG9yX2ZpbG1fc3RhcnMNCm1heF9kaXJlY3Rvcl9maWxtX21ldGFzY29yZQ0KYXZnX2RpcmVjdG9yX2ZpbG1fbWV0YXNjb3JlDQoNCg0KYGBge3J9DQoNCmBgYA0KDQpEaXZpZGUgZGF0YSBpbnRvIHRyYWluaW5nIGFuZCB0ZXN0DQpVc2luZyBhIHJhbmRvbSA1MC81MCBhbmQgMzAvNzAgc3BsaXQNCmBgYHtyfQ0KDQpgYGANCg0KQnVpbGRpbmcgdGhlIHR3byB0ZXN0IG1vZGVscw0KYGBge3J9DQoNCmBgYA0KDQpSdW5uaW5nIHRoZSB0ZXN0cw0KYGBge3J9DQoNCmBgYA0KDQpDaGVja2luZyAlIGNvcnJlY3Qgb2YgYm90aCBtb2RlbCB0ZXN0cw0KYGBge3J9DQoNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbG0gUmV2ZW51ZSBNb2RlbCINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQo8c3Ryb25nPkJ1c2luZXNzIHVuZGVyc3RhbmRpbmc8L3N0cm9uZz48YnI+DQo8YSBocmVmPSJodHRwOi8vYmxvZy5qZG5vcnRoY290dC5jb20vMjAxNy8xMS9yZWFkeS1zZXQtZ28uaHRtbCI+UHJvamVjdCBBYm91dDwvYT48YnI+PGJyPg0KDQo8c3Ryb25nPkRhdGEgdW5kZXJzdGFuZGluZzwvc3Ryb25nPjxicj4NCjxhIGhyZWY9Imh0dHA6Ly9ibG9nLmpkbm9ydGhjb3R0LmNvbS8yMDE3LzExL3B5dGhvbi1zY3JhcGVyLWJyYWluLWR1bXAuaHRtbCI+SW5pdGFsIEJyYWluIER1bXAgb2YgUHl0aG9uPC9hPjxicj4NCjxhIGhyZWY9Imh0dHA6Ly9ibG9nLmpkbm9ydGhjb3R0LmNvbS8yMDE3LzExL3ItYnJhaW4tZHVtcC5odG1sIj5Jbml0aWFsIEJyYWluIER1bXAgb2YgUjwvYT48YnI+PGJyPg0KDQo8c3Ryb25nPkRhdGEgcHJlcGFyYXRpb248L3N0cm9uZz48YnI+DQo8YSBocmVmPSJodHRwOi8vYmxvZy5qZG5vcnRoY290dC5jb20vMjAxNy8xMS9pbXBsZW1lbnRpbmctcHl0aG9uLXNjcmFwZXIuaHRtbCI+UHl0aG9uIFNjcmFwaW5nIERheSBPbmU8L2E+PGJyPg0KPGEgaHJlZj0iaHR0cDovL2Jsb2cuamRub3J0aGNvdHQuY29tLzIwMTcvMTIvaW1wbGVtZW50aW5nLXB5dGhvbi1zY3JhcGVyLWRheS10d28uaHRtbCI+UHl0aG9uIFNjcmFwaW5nIERheSBUd288L2E+PGJyPg0KPGEgaHJlZj0iaHR0cDovL2Jsb2cuamRub3J0aGNvdHQuY29tLzIwMTcvMTIvaW1wbGVtZW50aW5nLXB5dGhvbi1zY3JhcGVyLWRheS10aHJlZS5odG1sIj5QeXRob24gU2NyYXBpbmcgRGF5IFRocmVlPC9hPjxicj48YnI+DQpTdW1tYXJ5Og0KDQo8c3Ryb25nPk1vZGVsaW5nPC9zdHJvbmc+PGJyPg0KQmFja3dhcmRzIGZpdHRpbmcNCg0KRXZhbHVhdGlvbg0KRml0DQpUZXN0IE1ldGhvZHMNClRlc3QgUmVzdWx0cw0KDQo8c3Ryb25nPkRlcGxveW1lbnQ8L3N0cm9uZz48YnI+DQpTYXZlIGNvLWVmZmljaWVudHMgaW4gUHl0aG9uIHNjcmlwdA0KUGVvcGxlIGNhbiBydW4gdGhlbXNlbHZlcyANCg0KPHN0cm9uZz5Mb2FkaW5nIFJNb25nbyBhbmQgbGlua2luZyB0byBsb2NhbCBkYXRhYmFzZTwvc3Ryb25nPg0KYGBge3J9DQpyZXF1aXJlKFJNb25nbykNCm1nMSA8LSBtb25nb0RiQ29ubmVjdCgnZHM0MTAwJykNCmRiU2hvd0NvbGxlY3Rpb25zKG1nMSkNCmBgYA0KDQoNCjxzdHJvbmc+QnVpbGRpbmcgdGhlIGRhdGEuZnJhbWU8L3N0cm9uZz4NCmBgYHtyfQ0KZmlsbXMgPC0gZGJHZXRRdWVyeShtZzEsICdmaWxtc19hZ2cnLCAieydGQUlMRUQnOiBmYWxzZX0iKSANCmBgYA0KDQo8c3Ryb25nPk1hcCBhbGwgRGlzdGluY3QgTVBBQSB2YWx1ZXMgYW5kIGNyZWF0ZSBhICJkaWN0aW9uYXJ5Ijwvc3Ryb25nPg0KYGBge3J9DQojIEFueSBub24tc2Vuc2UgdmFsdWVzIHdpbGwgYmUgMA0KIyBHbyBmcm9tIE5DLTE3IC0+IEcgYmVpbmcgMSAtIG4NCiMgRGVmYXVsdCB2YWx1ZSB0byByZXR1cm4gaWYgc3RyaW5nIGlzIHNvbWV0aGluZyByYW5kb20NCm1wYWEuaW50LmRlZmF1bHQgPC0gMA0KbXBhYS5zdHJpbmdzIDwtIGMoDQogICAgIk5DLTE3IiwNCiAgICAiUiIsDQogICAgIlBHLTEzIiwNCiAgICAiTS9QRyIsDQogICAgIlBHIiwNCiAgICAiUEFTU0VEIiwNCiAgICAiRyINCikNCm1wYWEuaW50cyA8LSBjKDE6NykNCiMgU2V0dGluZyB0aGUgbmFtZXMgb2YgdGhlIGludHMgdG8gdGhlIGNvcnJlc3BvbmRpbmcgcmF0aW5ncw0KbmFtZXMobXBhYS5pbnRzKSA8LSBtcGFhLnN0cmluZ3MNCiMgVGVzdCBpdCBvdXQNCm1wYWEuaW50c1snUiddDQpgYGANCg0KPHN0cm9uZz5Xcml0ZSBhIGZ1bmN0aW9uIHRvIHJlbWFwIE1QQUEgdmFsdWVzIHRvIGEgbnVtYmVyPC9zdHJvbmc+DQpgYGB7cn0NCiMgVGFrZXMgYSBzdHJpbmcgcmF0aW5nIGFuZCByZXR1cm5zIGFuIGludA0KbXBhYS5tYXBwaW5nPC1mdW5jdGlvbihyYXRpbmcpIHsNCiAgaWYgKHJhdGluZyAlaW4lIG1wYWEuc3RyaW5ncykgew0KICAgIHJldHVybihtcGFhLmludHNbcmF0aW5nXSkNCiAgfSBlbHNlIHsNCiAgICByZXR1cm4obXBhYS5pbnQuZGVmYXVsdCkNCiAgfQ0KfQ0KDQptcGFhLm1hcHBpbmcoJ1InKSAgICMgMg0KbXBhYS5tYXBwaW5nKCdYWFgnKSAjIDANCmBgYA0KDQo8c3Ryb25nPkNyZWF0ZSBuZXcgY29sdW1uIGluIGRhdGEuZnJhbWUgd2l0aCBtcGFhIGludHM8L3N0cm9uZz4NCmBgYHtyfQ0Kc3RyaW5nX3JhdGluZ3MgPC0gZmlsbXMkbXBhYQ0Kc3RyaW5nX2ludHMgPC0gc2FwcGx5KHN0cmluZ19yYXRpbmdzLCBtcGFhLm1hcHBpbmcpDQpmaWxtcyRtcGFhX251bSA8LSBzdHJpbmdfaW50cw0KYGBgDQoNCjxzdHJvbmc+UG9zc2libGUgZmllbGRzIHRvIGJlIGluY2x1ZGVkIGluIHRoZSBtb2RlbC4gR29pbmcgdG8gdXNlIGJhY2t3YXJkcyBmaXR0aW5nIHRvIGRlc2lnbiB0aGUgbW9kZWw8YnI+PC9zdHJvbmc+DQo8cD4NCnJldmVudWU8YnI+DQp8PGJyPg0Kdjxicj4NCkZJTE0gU1BFQ0lGSUM8YnI+DQp3ZWVrZGF5PGJyPg0KZGF5PGJyPg0KbW9udGg8YnI+DQpidWRnZXQ8YnI+DQpsZW5ndGg8YnI+DQptcGFhX251bTxicj4NCmRpcmVjdG9yX2FnZTxicj4NCmF2Z19hY3Rvcl9hZ2U8YnI+DQoNCkFDVE9SIFNQRUNJRklDIDxicj4NCm1heF9hY3Rvcl9maWxtX3JldmVudWU8YnI+DQphdmdfYWN0b3JfZmlsbV9yZXZlbnVlPGJyPg0KbWF4X2FjdG9yX2ZpbG1fdm90ZXM8YnI+DQphdmdfYWN0b3JfZmlsbV92b3Rlczxicj4NCm1heF9hY3Rvcl9maWxtX3N0YXJzPGJyPg0KYXZnX2FjdG9yX2ZpbG1fc3RhcnM8YnI+DQptYXhfYWN0b3JfZmlsbV9hcHBlYXJhbmNlczxicj4NCmF2Z19hY3Rvcl9maWxtX2FwcGVhcmFuY2VzPGJyPg0KbWF4X2FjdG9yX2ZpbG1fbWV0YXNjb3JlPGJyPg0KYXZnX2FjdG9yX2ZpbG1fbWV0YXNjb3JlPGJyPg0KDQpESVJFQ1RPUiBTUEVDSUZJQzxicj4NCmRpcmVjdG9yX251bWJlcl9vZl9maWxtczxicj4NCm1heF9kaXJlY3Rvcl9maWxtX3JldmVudWU8YnI+DQphdmdfZGlyZWN0b3JfZmlsbV9yZXZlbnVlPGJyPg0KbWF4X2RpcmVjdG9yX2ZpbG1fdm90ZXM8YnI+DQphdmdfZGlyZWN0b3JfZmlsbV92b3Rlczxicj4NCm1heF9kaXJlY3Rvcl9maWxtX3N0YXJzPGJyPg0KYXZnX2RpcmVjdG9yX2ZpbG1fc3RhcnM8YnI+DQptYXhfZGlyZWN0b3JfZmlsbV9tZXRhc2NvcmU8YnI+DQphdmdfZGlyZWN0b3JfZmlsbV9tZXRhc2NvcmU8YnI+DQo8L3A+DQoNCmBgYHtyfQ0KDQpgYGANCg0KPHN0cm9uZz5EaXZpZGUgZGF0YSBpbnRvIHRyYWluaW5nIGFuZCB0ZXN0PC9zdHJvbmc+DQo8c3Ryb25nPlVzaW5nIGEgcmFuZG9tIDUwLzUwIGFuZCAzMC83MCBzcGxpdDwvc3Ryb25nPg0KYGBge3J9DQoNCmBgYA0KDQo8c3Ryb25nPkJ1aWxkaW5nIHRoZSB0d28gdGVzdCBtb2RlbHM8L3N0cm9uZz4NCmBgYHtyfQ0KDQpgYGANCg0KPHN0cm9uZz5SdW5uaW5nIHRoZSB0ZXN0czwvc3Ryb25nPg0KYGBge3J9DQoNCmBgYA0KDQo8c3Ryb25nPkNoZWNraW5nICUgY29ycmVjdCBvZiBib3RoIG1vZGVsIHRlc3RzPC9zdHJvbmc+DQpgYGB7cn0NCg0KYGBgDQoNCg==</div>
 
 
 

@@ -27,7 +27,7 @@ Test Results
 Save co-efficients in Python script
 People can run themselves 
 
-Loading RMongo and linking to local database
+<strong>Loading RMongo and linking to local database</strong>
 ```{r}
 require(RMongo)
 mg1 <- mongoDbConnect('ds4100')
@@ -35,82 +35,115 @@ dbShowCollections(mg1)
 ```
 
 
-Building the data.frame
+<strong>Building the data.frame</strong>
 ```{r}
 films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}") 
 ```
 
-Get all Distinct MPAA values
+<strong>Map all Distinct MPAA values and create a "dictionary"</strong>
 ```{r}
-mpaa.distinct <- dbGetDistinct(mg1, 'films_agg', "mpaa", "{}") 
 # Any non-sense values will be 0
-# Go from G -> R being 1 - n
+# Go from NC-17 -> G being 1 - n
+# Default value to return if string is something random
+mpaa.int.default <- 0
+mpaa.strings <- c(
+    "NC-17",
+    "R",
+    "PG-13",
+    "M/PG",
+    "PG",
+    "PASSED",
+    "G"
+)
+mpaa.ints <- c(1:7)
+# Setting the names of the ints to the corresponding ratings
+names(mpaa.ints) <- mpaa.strings
+# Test it out
+mpaa.ints['R']
 ```
 
-Write a function to remap MPAA values to a number
+<strong>Write a function to remap MPAA values to a number</strong>
+```{r}
+# Takes a string rating and returns an int
+mpaa.mapping<-function(rating) {
+  if (rating %in% mpaa.strings) {
+    return(mpaa.ints[rating])
+  } else {
+    return(mpaa.int.default)
+  }
+}
+
+mpaa.mapping('R')   # 2
+mpaa.mapping('XXX') # 0
+```
+
+<strong>Create new column in data.frame with mpaa ints</strong>
+```{r}
+string_ratings <- films$mpaa
+string_ints <- sapply(string_ratings, mpaa.mapping)
+films$mpaa_num <- string_ints
+```
+
+<strong>Possible fields to be included in the model. Going to use backwards fitting to design the model<br></strong>
+<p>
+revenue<br>
+|<br>
+v<br>
+FILM SPECIFIC<br>
+weekday<br>
+day<br>
+month<br>
+budget<br>
+length<br>
+mpaa_num<br>
+director_age<br>
+avg_actor_age<br>
+
+ACTOR SPECIFIC <br>
+max_actor_film_revenue<br>
+avg_actor_film_revenue<br>
+max_actor_film_votes<br>
+avg_actor_film_votes<br>
+max_actor_film_stars<br>
+avg_actor_film_stars<br>
+max_actor_film_appearances<br>
+avg_actor_film_appearances<br>
+max_actor_film_metascore<br>
+avg_actor_film_metascore<br>
+
+DIRECTOR SPECIFIC<br>
+director_number_of_films<br>
+max_director_film_revenue<br>
+avg_director_film_revenue<br>
+max_director_film_votes<br>
+avg_director_film_votes<br>
+max_director_film_stars<br>
+avg_director_film_stars<br>
+max_director_film_metascore<br>
+avg_director_film_metascore<br>
+</p>
+
 ```{r}
 
 ```
 
-Possible fields to be included in the model. Going to use backwards fitting to design the model
-revenue
-|
-v
-FILM SPECIFIC
-weekday
-day
-month
-budget
-length
-mpaa_num
-director_age
-avg_actor_age
-
-ACTOR SPECIFIC 
-max_actor_film_revenue
-avg_actor_film_revenue
-max_actor_film_votes
-avg_actor_film_votes
-max_actor_film_stars
-avg_actor_film_stars
-max_actor_film_appearances
-avg_actor_film_appearances
-max_actor_film_metascore
-avg_actor_film_metascore
-
-DIRECTOR SPECIFIC
-director_number_of_films
-max_director_film_revenue
-avg_director_film_revenue
-max_director_film_votes
-avg_director_film_votes
-max_director_film_stars
-avg_director_film_stars
-max_director_film_metascore
-avg_director_film_metascore
-
-
+<strong>Divide data into training and test</strong>
+<strong>Using a random 50/50 and 30/70 split</strong>
 ```{r}
 
 ```
 
-Divide data into training and test
-Using a random 50/50 and 30/70 split
+<strong>Building the two test models</strong>
 ```{r}
 
 ```
 
-Building the two test models
+<strong>Running the tests</strong>
 ```{r}
 
 ```
 
-Running the tests
-```{r}
-
-```
-
-Checking % correct of both model tests
+<strong>Checking % correct of both model tests</strong>
 ```{r}
 
 ```
