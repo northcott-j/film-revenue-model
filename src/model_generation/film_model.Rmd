@@ -84,6 +84,42 @@ string_ints <- sapply(string_ratings, mpaa.mapping)
 films$mpaa_num <- string_ints
 ```
 
+<strong>Fix Directors Age (negative or 0 values)</strong>
+```{r}
+avg_abv_zero_age <- mean(films$director_age[films$director_age > 0])
+current_ages <- films$director_age
+# Adjust the values to the average
+adjusted_ages <- sapply(current_ages, function (a) if (a <= 0) {avg_abv_zero_age} else {a})
+# Update the column
+films$director_age <- adjusted_ages
+```
+
+<strong>Display Pairs Panels</strong>
+```{r}
+require(psych)
+pairs.panels(films)
+```
+
+
+<strong>Check for Outliers in the following:</strong>
+revenue<br>
+length<br>
+budget<br>
+```{r}
+outliers.high<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data >= (f_avg + f_sd * 2)])
+}
+
+outliers.low<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data <= (f_avg - f_sd * 2)])
+}
+```
+
+
 <strong>Possible fields to be included in the model. Going to use backwards fitting to design the model<br></strong>
 <p>
 revenue<br>
@@ -96,10 +132,9 @@ month<br>
 budget<br>
 length<br>
 mpaa_num<br>
-director_age<br>
-avg_actor_age<br>
 
 ACTOR SPECIFIC <br>
+avg_actor_age<br>
 max_actor_film_revenue<br>
 avg_actor_film_revenue<br>
 max_actor_film_votes<br>
@@ -112,6 +147,7 @@ max_actor_film_metascore<br>
 avg_actor_film_metascore<br>
 
 DIRECTOR SPECIFIC<br>
+director_age<br>
 director_number_of_films<br>
 max_director_film_revenue<br>
 avg_director_film_revenue<br>
@@ -124,27 +160,40 @@ avg_director_film_metascore<br>
 </p>
 
 ```{r}
+revenue.lm <- lm(revenue ~ ., data=films)
+summary(revenue.lm)
 
 ```
 
 <strong>Divide data into training and test</strong>
 <strong>Using a random 50/50 and 30/70 split</strong>
 ```{r}
+train.rows.50.50 <- sample(1:nrow(films), round(nrow(films) / 2), replace=F)
+train.50.50 <- films[train.rows.50.50,]
+test.50.50 <- films[-train.rows.50.50,]
 
+train.rows.30.70 <- sample(1:nrow(films), round(nrow(films) / 3.33), replace=F)
+train.30.70 <- films[test.df.30.70,]
+test.30.70 <- films[-test.df.30.70,]
 ```
 
 <strong>Building the two test models</strong>
 ```{r}
-
+lm.50.50 <- lm(revenue ~ ., data=train.50.50)
+lm.30.70 <- lm(revenue ~ ., data=train.30.70)
 ```
 
 <strong>Running the tests</strong>
 ```{r}
-
+results.50.50 <- apply(test.50.50,1,function (x) predict(lm.50.50, x))
+results.30.70 <- apply(test.30.70,1,function (x) predict(lm.30.70, x))
 ```
 
 <strong>Checking % correct of both model tests</strong>
 ```{r}
-
+diffs.50.50 <- test.50.50$revenue - results.50.50
+diffs.30.70 <- test.30.70$revenue - results.30.70
+avg.diff.50.50 <- mean(abs(diffs.50.50))
+avg.diff.30.70 <- mean(abs(diffs.30.70))
 ```
 
