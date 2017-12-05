@@ -296,7 +296,7 @@ class Actor:
         try:
             return self.films.index(f_id)
         except:
-            return None
+            return 0
 
     def get_avg_film_revenue_before(self, f_id):
         """
