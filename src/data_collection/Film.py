@@ -643,8 +643,8 @@ class Film:
 
         self.id = fields.get('id', None) or self.get_default_value('id')
         self.FAILED = fields.get('FAILED', None) or self.get_default_value('FAILED')
-        self.mojo_id = fields.get('mojo_id', None) or self.get_default_value('mojo_id')
-        self.mojo_title = fields.get('mojo_title', None) or self.get_default_value('mojo_title')
+        self.mojo_id = (fields.get('mojo_id', None) or self.get_default_value('mojo_id')).encode('utf-8')
+        self.mojo_title = (fields.get('mojo_title', None) or self.get_default_value('mojo_title')).encode('utf-8')
         self.stars = fields.get('stars', None) or self.get_default_value('stars')
         self.metascore = fields.get('metascore', None) or self.get_default_value('metascore')
         self.num_votes = fields.get('num_votes', None) or self.get_default_value('num_votes')
