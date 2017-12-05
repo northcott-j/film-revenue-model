@@ -225,7 +225,7 @@ class Actor:
         :return: nothing
         """
         self.FILMS_SORTED = True
-        self.films = sorted(self.films, key=lambda f_id: self.get_film(f_id).release_date if self.get_film(f_id).release_date else self.get_film(f_id).get_default_value("release_date"))
+        self.films = sorted(self.films, key=lambda f_id: self.get_film(f_id).get_release_date())
 
     def get_film_average_before(self, func, stop):
         """
