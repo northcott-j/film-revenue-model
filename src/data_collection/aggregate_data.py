@@ -66,7 +66,3 @@ def main():
     # Save all of the films to MongoDb
     for f_id in Film.all_films:
         db_conn['films_agg'].insert(Film.all_films[f_id].export())
-
-    # Save all of the actors to MongoDb
-    for a_id in Actor.all_actors:
-        db_conn['actors_agg'].insert(Actor.all_actors[a_id].export())
