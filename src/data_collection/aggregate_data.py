@@ -42,6 +42,8 @@ def main():
     client = pymongo.MongoClient(MONGO_URL)
     print "Linking to the following data: {0}...".format(MONGO_DB)
     db_conn = client[MONGO_DB]
+    print "Dropping films_agg collection..."
+    db_conn.drop_collection("films_agg")
     # Add all finished films to the Film.dict
     film_output_q = import_films(db_conn)
     actor_output_q = import_actors(db_conn)
