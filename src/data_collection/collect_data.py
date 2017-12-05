@@ -56,6 +56,27 @@ def get_seen_db_actors(db):
     return set(db['actors'].distinct("id", {"DIRECTOR": False}))
 
 
+def get_all_film_people(db):
+    """
+        Gets all of the actors and directors referenced by films
+        :param db: data base connection
+        :return: [{'id': str, 'DIRECTOR': boolean}]
+        """
+    films = db['films'].find({})
+    unique_people = set()
+    peoples = []
+    for f in films:
+        director = "director-{0}".format(f.get('director', ''))
+        if director not in unique_people:
+            peoples.append({'id': f.get('director', ''), 'DIRECTOR': True})
+            unique_people.add(director)
+        for a in films.get('actors', []):
+            if a not in unique_people:
+                peoples.append({'id': a, 'DIRECTOR': False})
+                unique_people.add(a)
+    return peoples
+
+
 def get_seen_db_directors(db):
     """
         Gets all of the directors already seen in the database
@@ -93,6 +114,7 @@ def main():
     seen_films = get_seen_db_films(db_conn)
     seen_mojos = get_scraped_mojo_ids(db_conn)
     seen_people = get_seen_db_actors(db_conn).union(get_seen_db_directors(db_conn))
+    add_to_people_q = get_all_film_people(db_conn)
     # Queue of Film objects with only a mojo_id, mojo_title and mojo_year
     raw_mojo_q = SetQueue(starting_set=seen_mojos.copy())
     # Queue of Film objects with an imdb_id that need to be scraped
@@ -103,6 +125,11 @@ def main():
     actor_save_q = SetQueue(starting_set=seen_people.copy())
     # Queue of Actor objects with an imdb_id that need to be scraped
     actor_todo_q = SetQueue(starting_set=seen_people.copy())
+    for p in add_to_people_q:
+        if p['DIRECTOR']:
+            actor_todo_q.put(Actor(p['id'], True), "director-{0}".format(p['id']))
+        else:
+            actor_todo_q.put(Actor(p['id'], False), p['id'])
     # Queue of finished Film objects
     film_output_q = SetQueue(starting_set=seen_films.copy())
     # Queue of finished Actor objects
