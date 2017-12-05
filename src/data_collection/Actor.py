@@ -245,7 +245,6 @@ class Actor:
             val = func(f_id)
             # If value isn't available, ignore the film and continue
             if not val:
-                length -= 1
                 continue
             length += 1
             sum_stat += val
@@ -278,9 +277,9 @@ class Actor:
         """
         Gets the approx. age of the actor during a film
         :param f_id: the id for the film
-        :return: int
+        :return: pos int
         """
-        return self.get_film(f_id).get_release_date().year - (self.birthday or self.get_default_value('birthday')).year
+        return max(0, self.get_film(f_id).get_release_date().year - (self.birthday or self.get_default_value('birthday')).year)
 
     def get_num_appearances_before(self, f_id):
         """

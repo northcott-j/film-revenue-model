@@ -716,7 +716,7 @@ class Film:
         :param func: a function that takes an Actor id and returns a numerical field
         :return: {sum: int, min: int, max: int, avg: int}
         """
-        length = len(self.actors)
+        length = 0
         sum_stat = 0
         max_stat = 0
         min_stat = 0
@@ -724,8 +724,8 @@ class Film:
             val = func(actor_id)
             # If the actor doesn't have a value, subtract from length and skip
             if not val or val < 0:
-                length -= 1
                 continue
+            length += 1
             sum_stat += val
             if val > max_stat:
                 max_stat = val
