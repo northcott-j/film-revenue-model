@@ -16,7 +16,7 @@ class Film:
         # If anything critical fails during the scrape process
         self.FAILED = False
         # The ID of the movie on Box Office Mojo                            !important
-        self.mojo_id = mojo_id
+        self.mojo_id = mojo_id.encode('utf-8')
         # The year from Box Office Mojo scrape to help filter IMDb results  !important
         self.mojo_year = str(mojo_year)
         # The Title found on Box Office Mojo                                !important
@@ -181,7 +181,7 @@ class Film:
                             and valid_year(self.mojo_year, ts.text, YEAR_TOLERANCE):
                         link = ts.find('a')['href']
                         # Format is normally href="/title/tt0086190/?ref_=fn_al_tt_1"
-                        self.id = link.replace('/title/', '').split('/')[0]
+                        self.id = link.replace('/title/', '').split('/')[0].encode('utf-8')
                         return self.id
         self.id = self.handle_error('id')
         return self.id

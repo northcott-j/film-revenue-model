@@ -18,7 +18,7 @@ class Actor:
         # This is true if the films have been sorted
         self.FILMS_SORTED = False
         # ID found on IMDb                                                      !important
-        self.id = imdb_id
+        self.id = imdb_id.encode('utf-8')
         # The Actor's name
         self.name = ''
         # The BS'd HTML of the IMDb page                                        !important
