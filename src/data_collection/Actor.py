@@ -188,12 +188,12 @@ class Actor:
         :mutate all fields: every field is updated
         :return: nothing
         """
-        self.id = fields.get('id', None) or self.get_default_value('id')
-        self.FAILED = fields.get('FAILED', None) or self.get_default_value('FAILED')
-        self.DIRECTOR = fields.get('DIRECTOR', None) or self.get_default_value('DIRECTOR')
-        self.name = fields.get('name', None) or self.get_default_value('name')
-        self.birthday = fields.get('birthday', None) or self.get_default_value('birthday')
-        self.films = fields.get('films', None) or self.get_default_value('films')
+        self.id = fields.get('id', self.get_default_value('id'))
+        self.FAILED = fields.get('FAILED', self.get_default_value('FAILED'))
+        self.DIRECTOR = fields.get('DIRECTOR', self.get_default_value('DIRECTOR'))
+        self.name = fields.get('name', self.get_default_value('name'))
+        self.birthday = fields.get('birthday', self.get_default_value('birthday'))
+        self.films = fields.get('films', self.get_default_value('films'))
 
     def purge(self):
         """
@@ -214,10 +214,7 @@ class Actor:
         """
         default = Film.Film('NonsenseFilmId', 'No Title', '3000')
         if Film.Film.all_films.get(film_id, None):
-            if Film.Film.all_films[film_id].FAILED:
-                return default
-            else:
-                return Film.Film.all_films[film_id]
+            return Film.Film.all_films[film_id]
         else:
             return default
 
