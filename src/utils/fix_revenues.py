@@ -18,4 +18,4 @@ def main():
         # If the revenue is greater than zero, update the revenue field
         if new_rev > 0:
             print "Updating the revenue for Film:{0} to ${1}".format(ff['mojo_id'], str(new_rev))
-            db_conn['films'].update({"_id": ff["_id"]}, {'$inc': {'count': 1}, '$set': {'revenue': new_rev}})
+            db_conn['films'].update({"_id": ff["_id"]}, {'$set': {'revenue': new_rev}})
