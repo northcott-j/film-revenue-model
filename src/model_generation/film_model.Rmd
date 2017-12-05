@@ -3,17 +3,19 @@ title: "Film Revenue Model"
 output: html_notebook
 ---
 <strong>Business understanding</strong><br>
-<a href="http://blog.jdnorthcott.com/2017/11/ready-set-go.html">Project About</a><br><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/11/ready-set-go.html">Project About</a><br><br>
 
 <strong>Data understanding</strong><br>
-<a href="http://blog.jdnorthcott.com/2017/11/python-scraper-brain-dump.html">Inital Brain Dump of Python</a><br>
-<a href="http://blog.jdnorthcott.com/2017/11/r-brain-dump.html">Initial Brain Dump of R</a><br><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/11/python-scraper-brain-dump.html">Inital Brain Dump of Python</a><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/11/r-brain-dump.html">Initial Brain Dump of R</a><br><br>
 
 <strong>Data preparation</strong><br>
-<a href="http://blog.jdnorthcott.com/2017/11/implementing-python-scraper.html">Python Scraping Day One</a><br>
-<a href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-two.html">Python Scraping Day Two</a><br>
-<a href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-three.html">Python Scraping Day Three</a><br><br>
-Summary:
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/11/implementing-python-scraper.html">Python Scraping Day One</a><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-two.html">Python Scraping Day Two</a><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-three.html">Python Scraping Day Three</a><br><br>
+Summary:<br>
+<p>I ran into a bunch of issues while scraping the data. Those three blog posts show what I worked on each day and some of the problems that I ran into. I tried to update them live with my exact thoughts and how I worked through, or avoided, the problems that came up with Data Prepartion.</p><br>
+<a target="_blank" href="http://blog.jdnorthcott.com/2017/12/improvements-for-future-updates.html">Improvements</a><br>
 
 <strong>Modeling</strong><br>
 Backwards fitting
@@ -24,8 +26,7 @@ Test Methods
 Test Results
 
 <strong>Deployment</strong><br>
-Save co-efficients in Python script
-People can run themselves 
+<p>I created a script that people can use to run the model. They need to have Python2.7 installed. Follow the directions in the README to use it. There is info on how to build the model from scratch as well in the README. I also have a blog post of potential improvements.</p>
 
 <strong>Loading RMongo and linking to local database</strong>
 ```{r}
@@ -35,9 +36,19 @@ dbShowCollections(mg1)
 ```
 
 
-<strong>Building the data.frame</strong>
+<strong>Building the data.frame</strong><br>
+Remove the following columns as they aren't needed in the model<br>
+X_id<br>
+id<br>
+FAILED<br>
+mojo_id<br>
+mojo_title<br>
+stars<br>
+metascore<br>
+num_votes<br>
 ```{r}
 films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}") 
+films <- subset(films, select = -c(X_id, id, FAILED, mojo_id, mojo_title, stars, metascore, num_votes))
 ```
 
 <strong>Map all Distinct MPAA values and create a "dictionary"</strong>
@@ -117,6 +128,27 @@ outliers.low<-function(f_data) {
   f_avg <- mean(f_data, na.rm = TRUE)
   return(f_data[f_data <= (f_avg - f_sd * 2)])
 }
+
+# Revenue
+print("Revenue")
+print("High")
+outliers.high(films$revenue)
+print("Low")
+outliers.low(films$revenue)
+
+# Length
+print("Length")
+print("High")
+outliers.high(films$length)
+print("Low")
+outliers.low(films$length)
+
+# Budget
+print("Budget")
+print("High")
+outliers.high(films$budget)
+print("Low")
+outliers.low(films$budget)
 ```
 
 
