@@ -94,19 +94,19 @@ def main():
     seen_mojos = get_scraped_mojo_ids(db_conn)
     seen_people = get_seen_db_actors(db_conn).union(get_seen_db_directors(db_conn))
     # Queue of Film objects with only a mojo_id, mojo_title and mojo_year
-    raw_mojo_q = SetQueue(starting_set=seen_mojos)
+    raw_mojo_q = SetQueue(starting_set=seen_mojos.copy())
     # Queue of Film objects with an imdb_id that need to be scraped
-    film_todo_q = SetQueue(starting_set=seen_films)
+    film_todo_q = SetQueue(starting_set=seen_films.copy())
     # Queue of Films to be saved
-    film_save_q = SetQueue(starting_set=seen_films)
+    film_save_q = SetQueue(starting_set=seen_films.copy())
     # Queue of Actors to be saved
-    actor_save_q = SetQueue(starting_set=seen_people)
+    actor_save_q = SetQueue(starting_set=seen_people.copy())
     # Queue of Actor objects with an imdb_id that need to be scraped
-    actor_todo_q = SetQueue(starting_set=seen_people)
+    actor_todo_q = SetQueue(starting_set=seen_people.copy())
     # Queue of finished Film objects
-    film_output_q = SetQueue(starting_set=seen_films)
+    film_output_q = SetQueue(starting_set=seen_films.copy())
     # Queue of finished Actor objects
-    actor_output_q = SetQueue(starting_set=seen_people)
+    actor_output_q = SetQueue(starting_set=seen_people.copy())
     # Page letters
     letters = ['NUM', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
