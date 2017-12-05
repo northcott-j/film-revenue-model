@@ -4,7 +4,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 from config.GLOBALS import YEAR_TOLERANCE
-from utils.print_colors import OKGREEN, ENDC, FAIL
+from utils.print_colors import OKGREEN, ENDC, FAIL, WARNING
 
 
 class Film:
@@ -135,9 +135,11 @@ class Film:
             "avg_director_film_votes": {"value": 0, "important": False},
             "max_director_film_votes": {"value": 0, "important": False}
         }
-        print "{0}Film:{1} {2} field failed!!{3}".format(FAIL, self.mojo_id, field, ENDC)
+        color = WARNING
         if fields[field]['important']:
             self.FAILED = True
+            color = FAIL
+        print "{0}Film:{1} {2} field failed!!{3}".format(color, self.mojo_id, field, ENDC)
         return fields[field]['value']
 
     def set_imdb_id(self):

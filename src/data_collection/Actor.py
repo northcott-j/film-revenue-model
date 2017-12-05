@@ -3,7 +3,7 @@ import datetime
 import Film
 import requests
 from bs4 import BeautifulSoup
-from utils.print_colors import OKGREEN, ENDC, FAIL
+from utils.print_colors import OKGREEN, ENDC, FAIL, WARNING
 
 
 class Actor:
@@ -42,9 +42,11 @@ class Actor:
             "birthday": {"value": datetime.datetime(3000, 1, 1), "important": True},
             "films": {"value": [], "important": True}
         }
-        print "{0}Actor:{1} {2} field failed!!{3}".format(FAIL, self.id, field, ENDC)
+        color = WARNING
         if fields[field]['important']:
             self.FAILED = True
+            color = FAIL
+        print "{0}Actor:{1} {2} field failed!!{3}".format(color, self.id, field, ENDC)
         return fields[field]['value']
 
     def set_non_aggregate_fields(self):
