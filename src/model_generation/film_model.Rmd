@@ -234,5 +234,12 @@ diffs.50.50 <- test.50.50$revenue - results.50.50
 diffs.30.70 <- test.30.70$revenue - results.30.70
 avg.diff.50.50 <- mean(abs(diffs.50.50))
 avg.diff.30.70 <- mean(abs(diffs.30.70))
+print(avg.diff.50.50)
+print(avg.diff.30.70)
+```
+
+<strong>Coefficients used in Python</strong>
+```{r}
+coefficients(revenue.lm)
 ```
 
