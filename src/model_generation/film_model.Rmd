@@ -1,0 +1,117 @@
+---
+title: "Film Revenue Model"
+output: html_notebook
+---
+<strong>Business understanding</strong><br>
+<a href="http://blog.jdnorthcott.com/2017/11/ready-set-go.html">Project About</a><br><br>
+
+<strong>Data understanding</strong><br>
+<a href="http://blog.jdnorthcott.com/2017/11/python-scraper-brain-dump.html">Inital Brain Dump of Python</a><br>
+<a href="http://blog.jdnorthcott.com/2017/11/r-brain-dump.html">Initial Brain Dump of R</a><br><br>
+
+<strong>Data preparation</strong><br>
+<a href="http://blog.jdnorthcott.com/2017/11/implementing-python-scraper.html">Python Scraping Day One</a><br>
+<a href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-two.html">Python Scraping Day Two</a><br>
+<a href="http://blog.jdnorthcott.com/2017/12/implementing-python-scraper-day-three.html">Python Scraping Day Three</a><br><br>
+Summary:
+
+<strong>Modeling</strong><br>
+Backwards fitting
+
+Evaluation
+Fit
+Test Methods
+Test Results
+
+<strong>Deployment</strong><br>
+Save co-efficients in Python script
+People can run themselves 
+
+Loading RMongo and linking to local database
+```{r}
+require(RMongo)
+mg1 <- mongoDbConnect('ds4100')
+dbShowCollections(mg1)
+```
+
+
+Building the data.frame
+```{r}
+films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}") 
+```
+
+Get all Distinct MPAA values
+```{r}
+mpaa.distinct <- dbGetDistinct(mg1, 'films_agg', "mpaa", "{}") 
+# Any non-sense values will be 0
+# Go from G -> R being 1 - n
+```
+
+Write a function to remap MPAA values to a number
+```{r}
+
+```
+
+Possible fields to be included in the model. Going to use backwards fitting to design the model
+revenue
+|
+v
+FILM SPECIFIC
+weekday
+day
+month
+budget
+length
+mpaa_num
+director_age
+avg_actor_age
+
+ACTOR SPECIFIC 
+max_actor_film_revenue
+avg_actor_film_revenue
+max_actor_film_votes
+avg_actor_film_votes
+max_actor_film_stars
+avg_actor_film_stars
+max_actor_film_appearances
+avg_actor_film_appearances
+max_actor_film_metascore
+avg_actor_film_metascore
+
+DIRECTOR SPECIFIC
+director_number_of_films
+max_director_film_revenue
+avg_director_film_revenue
+max_director_film_votes
+avg_director_film_votes
+max_director_film_stars
+avg_director_film_stars
+max_director_film_metascore
+avg_director_film_metascore
+
+
+```{r}
+
+```
+
+Divide data into training and test
+Using a random 50/50 and 30/70 split
+```{r}
+
+```
+
+Building the two test models
+```{r}
+
+```
+
+Running the tests
+```{r}
+
+```
+
+Checking % correct of both model tests
+```{r}
+
+```
+
