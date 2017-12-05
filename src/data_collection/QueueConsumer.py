@@ -27,7 +27,10 @@ class QueueConsumer:
         :return: Nothing
         """
         while True:
-            self.consume()
+            try:
+                self.consume()
+            except:
+                print "SOMETHING ABSOLUTELY  HORRID HAPPENED BUT I'M GONNA KEEP ON TRUCKING!!!!"
 
     @abstractmethod
     def consume(self):
