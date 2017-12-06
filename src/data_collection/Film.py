@@ -228,6 +228,21 @@ class Film:
             print "{0}Calling {1} for {2}...{3}".format(OKGREEN, str(f), self.mojo_title, ENDC)
             f()
 
+    def set_non_aggregate_predict_fields(self, imdb_id=''):
+        """
+        Calls each set function needed to predict a film revenue
+        :param imdb_id: Set the imdb_id before running
+        :mutate: Every field - see inner functions
+        :return: Nothing
+        """
+        if imdb_id:
+            self.id = imdb_id
+        funcs = [self.set_imdb_page, self.set_length, self.set_mpaa, self.set_budget, self.set_release_date,
+                 self.set_month, self.set_day, self.set_weekday, self.set_director, self.set_actors]
+        for f in funcs:
+            print "{0}Calling {1} for {2}...{3}".format(OKGREEN, str(f), self.mojo_title, ENDC)
+            f()
+
     def set_imdb_page(self):
         """
         Sets the self.imdb_page field
