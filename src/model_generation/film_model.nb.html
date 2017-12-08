@@ -316,20 +316,15 @@ pairs.panels(films)</code></pre>
 <p><strong>Histogram of Important Values</strong></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBoaXN0KGZpbG1zJHJldmVudWUpXG4jIGhpc3QoZmlsbXMkYnVkZ2V0KVxubWVhbihmaWxtcyRidWRnZXQpXG5gYGAifQ== -->
-<pre class="r"><code># hist(films$revenue)
-# hist(films$budget)
-mean(films$budget)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGlzdChmaWxtcyRyZXZlbnVlKVxuYGBgIn0= -->
+<pre class="r"><code>hist(films$revenue)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIxNjczMTM2XG4ifQ== -->
-<pre><code>[1] 21673136</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuKGZpbG1zJGJ1ZGdldClcbmBgYCJ9 -->
-<pre class="r"><code>median(films$budget)</code></pre>
+<!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGwCAMAAAB8TkaXAAAAyVBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6OpA6ZpA6ZrY6kJA6kLY6kNtmAABmADpmOgBmOjpmOpBmZmZmkLZmkNtmtrZmtttmtv+QOgCQZgCQZjqQkDqQkGaQkLaQtpCQttuQtv+Q29uQ2/+2ZgC2Zjq2ZpC2kGa2tpC227a229u22/+2/7a2///bkDrbkGbbtmbbtpDb25Db27bb29vb/7bb////tmb/25D/27b//7b//9v///+Z1PxIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAQrElEQVR4nO3da2PixhmGYdld13a26aaBbJI2wUnTpGvStHVWOTWAgf//o6rRaKQRIKEROvDg+/qwC7J4JduPx6MZrIm2gKho7BMA2iK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4T1nq/vHsU/hnL3A8G4eopuF/f82f+J9+F/vuz7g93dR9FHx8I055v6B9zx/GiU7H9npJSO8Oxl6fnvddXiXSQajSfHw42bhXd2ZnY9G/AV76eHdM486D28cXT3uPTwe3uRM/n3/7V006/h0LsdLD2/25KfXUXT15skkJmHi+0vyO/sPf03jtfk+il49pqlOwvft2+j6afvL22S/D5MgrqfR7S+vo6svtz/dJXsVh8kLpCVtZu3Dd3nLe+DF+ZkkO0xW9+/Sn7D8sOZUrj5a5D9jSUs+2xZbzY7v0rPdul2SQ0y2/i4XhPCaJ3H6C9p8s114sy1mx2QXE7nXxeabxdJ+OIlkEg7rtYu9VRSoD+/Oi4szMTv8ml2wucNm+796n6U2KZgcoNjqXp4ezg+vt8sFeZnhdbLwmgZwsf057Zjab3nS37SZnqSt2+1ik+TOhvfmafu/5FV/XJidJmksJua10ZfZ/im/wG63YVMKb+nF/pnEeebdYc3JPdnD2j6PTWax1ez46ik7rB9eb5cLQniTDCXf1Vf/zT5qv+XZb+W5bYyzENjwui7obz+8NgWS7bbxu1n46fAL1Ia3/GL/TNZv08byu/Rl6WGzLkBsi7rK5a1mx6TKbSm8/i4XhPDaIEWuhzt3v7KzLuSje1zK4eZrV8C0ldvs3yK8foH68JZf7J/JdvNDOt4wy9vubPwhbZCTxzN7FH+r3dEW9MLr73JBXmZ4d/u8z2/tt/af2bfcfvft9ZB77IfXZOzVP36bVobXLxASXv9MtmaS4vOs+5FWWEZFBs3Z25f4W/fDm+7j73JBCK998vzNa3d51aDltalZV4e3bcvrn8k2nWFblg9bjJslfYC/p5v9rRXhXV3mgBvhzYdbN18VPdzqPq9rAmfb/ILtQHib93kPvTg9E/M8Ce/qrqjg2vNU2hUw5+5v9cNrHy+j/CQvDuG1A18fp32H/Dd09WiDawJvFs8P1X3e5qMN5Rd7Z5LscPXt/bt5kUPzs3D15fZ56n4VZFeP3tZyeJOC5iQnOy+8GITXPPm+6BGa7mHdOG/e5629YPPHeYNaXu9Msqss89BVyIZr7ZNllA0eeFv98OZXaZOdF14Mwps++dn0Mz982mbTaU/ZBNnf7AuSTX9+2httePWdGXqqCq9XIKjbUJxJ9sacJ7/C89d32Sa/u1Bs9cO7XSUXf2/+Y0fJ/BdejBcY3pbmI/zO5S2RtQjvUfP0/Yx24H9ghLcW4T3KDZJeWIfxAhDe454/vcve6YWzQnghi/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YWsQcIbNTPEqeCCDBPeDvcCHMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZ3STmyJ/yEF70oePEEF4Mh/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZYYnZPNg/s7x+H1SO8KIPQYmJo4l9sHQPmpUjvOhDSGI2D3lk45tFQDnCiz6EJGY9nbmHy4qOA+HFcGh5ISuwz5s1vfR5cQbCErOe2tGGinaX8GJIjPNCFuGFLCYpIItJCshiqAyymKSALFpeyGKSArKYpIAsxnkhi/BCFpMUkMUkBWQxVAZZ3UxSsAImRkDLC1lMUkAWkxSQxTgvZBFeyGKSArKYpIAshsogi7+kgCxaXshikgKymKSALMZ5IYvwQhbhhSzCC1lh47zFm84Z58XoghKzeah8U0NtOcKLPoS+Mee2TTnCiz4EJmYZzWo/TngxHC7YIIvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZhBeyCC9kEV7IIryQRXghK0/Mehod+ROfoHINtrbbC3C8xMRRVHULsjbljm5ttxfglBNzcn4JL4azm5i47qb94eXqtrbbC3BKiVkmyZ1tNw+VN4EMK3dka7u9AKdIjLkfjk1t1W3Pa6qwfCuG5402XD12WK7B1nZ7AQ7jvJDlJWaedBoq79cfXu7o1nZ7AU6RmHna4V1PT5qqILwYjtfntXchC79aO1iuwdZ2ewFOnhi3TlVMeCGiSIxdp2p1xwwbRHiJWd1FUXTieBnhxXAYKoMswgtZRWI2D7VLpYSWO7613V6A443znpTavXLHt7bbC3C8cd5T34heKtdga7u9AGdvkqKjcg22ttsLcLxJig7+hI3wYkBFYo6tUhVY7vjWdnsBjv/Xw4w2QArjvJBFeCHLS0zScbhZzHkzOlR4F2xXj/HN4sThXsKL4ZTez5uEl/fzQkZpksKEl7+kgIq9lnfe/o4jW8KLIe32eePaqYqj7zwjvBhOebThyF9SxO4P4yv/Qp7wYjghiXF/o5mIKzoXhBfDCUmM98azqss6wovhhLy3gZYXZ2U3MbUjZfnVHH1enIG9xMzr3tbrmufK4TTCi+HsJYZJCqjYSwzTw1Cxm5j6u0QySYEzsjfaUDc7zCQFzgmTFJDFJAVk7U9SVHdpaXlxVnb/9L32XWVMUuCceO/ntcGsalNTTFLgjBTdhk/smyGZpICKvZa31V9SsAImRlD6S4rk37j23ehMUuCM7P4lRW27yyQFzgmTFJDFJAVkhdzuiZYXZyXodk9MUuCchN3uiUkKnBFu9wRZ3O4JssJu92TWajNLFFfOZBBeDCfodk9pdu8fa9a9IrwYTtg478T9aTxDZRhfqc97hGlvs92YpMD4SqMNx5hWN6blxZnwLtiOj5Gtp9fv06Z3WdU1JrwYTsiN9rZmai1VeW8HwovhdJwYwovhEF7IsolpcrUWUK7Z1nZ7AY4X3gaDZQ3LNdvabi/AIbyQRXghi/BCFuGFLMILWS68R28RGVKu2dZ2ewEOkxSQRXghi/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2R1kxhWwMQIaHkhi/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZhBeyCC9kEV7IIryQFZaYzcORhQYJL4YTlJg4yhZ4XUYVK70SXgwnJDHe4sTxzSKgHOFFH0ISky6vbS0rOg6EF8Oh5YWswD5v1vTS58UZCEvMempHGyraXcKLITHOC1mEF7KYpIAsJikgi6EyyGKSArJoeSGLSQrIYpICshjnhaxuEsMKmBgBkxSQxSQFZDFUBllMUkAWLS9kMUkBWUxSQBaTFJBFeCErLDFx0mVIu70xow0YXdgF29Vj0u293RJenIPwobLNQ3K5RngxvjaTFPObBeHF+FpNUsxvCS/GF9bnzSK7nla9r4zwYjihow2247B5ILwYHeO8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZhBeyCC9knVN4G+ryfKHsnMJ7yiHwAhFeyCK8kEV4IYvwQhbhhaywKJzDakAMqCETdtORc1gNqNNB42aHxHlqdbunUdek6LJY03kRfhLOUpsb7W33VgM68g3sNiO4IO1S63IVsG+DlhcYTmCf99hqQMBwwtrto6sBAcPhKgOyCC9kEV7IIryQRXghi/BCFuGFrEHCO+oEJPo3RIgO5eoSDkL9y64/6nHVv3jUH7f+qMdV/+JRf9z6ox5X/YtH/XHrj3pc9S8e9cetP+px1b941B+3/qjHVf/iUX/c+qMeV/2LR/1x6496XPUvHvXHrX9uxwVORnghi/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1ndhXcZRVePB59U7FezzwH27qq3AfXjZP/Z4X0OW32Q3+69Yf2A8y/VL38yndRP17rJ75rc/fmX6vdw/m10Ft5lcqJLd7KlJxX71exzyOre27VJ/dg8CEnvepqvVdCk/jz5Z3XXrn7pk+mk/uYh2T12eer+/Mv1uz//VroKr73l//x2/0nFfjX7HOSvgtGs/m1QfdNiuEM0qb+emgcByxt49XeX9Oigvo1JbOv2cP6l+j2cfytdhbf0yXlP4vyXjf1pzT9U/mocF3vfiib1Q8O7jCb5t6RJfduwNf/V4df3PpnO6tuD2N37OH+/fm/nH6iz8Kannn17iidx+rtjUmzMP1R6QQPzPxV9rib1w7sNxck0qZ99c0IOUHyy+SfTaf2kbvOv/yn1ezv/QF2Ft/SDlj+xvzvsNy37tNyHAn8y11PzC2g+KR+spn7oBeHWC1eT+lkT0yq8+SfTbf18nZuezj+v39f5h+o3vPZB8nms7uwd2WZtw5sdxX77m9RPW4msUQir3rR+2ui0a3nd047r+9drfZx/eXyh8/MP1m+3YZndRXC2PbnbYI9ir14b1Q/sU/sn06R+0vJE0fWPnwT88O18sskZdlq/WF+sn/PfXb+s6/MP1+8Fm9+wnnjB5tVoVL9Fy75/wVZTP9v4QZsfjrxgl/XjIlu9nH+8u/Zex+ffQr9DZd6Cr9kn13aozH5RljtDQTX1Sy9oJt+5SX0raCho54cjedphfb932cf5+/X7OP82ep6kiN1w9f5+gZMU6ddj7ladb1D/hD5vk/rr6W1ol90bbXCfTGf1y59p9+dfrt/9+bfS3fRwNhtox1djb44wKrd+ccvpw7ntWzWvP/fnS5tIw9W4vpkibXG5mY0/u6nrrurHtvN59djT+e/U7/z8W+GNOZBFeCGL8EIW4YUswgtZhBeyCC9kEV7IIryQRXghi/BCFuGFLMILWYQXsggvZBFeyCK8kEV4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8A5g/Vmft5t7uQjvyeIo+st0VrojY1nwTdPQDOE9lb21/bY6vPPrHz/7td81nV4ownsqF9qq8K7uZkm3Yd7rjWpfKMJ7IrMaw/WPttuwuvtimvQQzKaZ/Ujyvw1vsuf6k2/M3UDt4k/Z/ZmvHt1iUOupeW3W+0j/ieltHEF4T7XO+rtpeNMwmoRm6xYso9l6evO7DW+6hk62+FN2m9ubhVsMaj01rzUL+GTh9VaJwmGE91Sl8E6ye4ibxUaKm/jbZXrTznG++JNZtiF5kj9PH5hWOguvv0oUDiO8pyqFd5Yt2JCmMA+euUn4xPYF8sWfzDN/sakitPb//APjfWZnj/Ceqiq8dp30NHvmgi1bfaRY/Gl+a3oN+fO98HqrROEwwnuqyvAadq2RJLyr+0ev5TWW6WVe/vxwy4s6hPdUteG1KUzCu/QuxdzrPk+7vbOiTN7Xdd0I1CK8p6oKr1uvKx1t+H3qFkUrFn+ap5dx7rkL7+bhZpF0OGYHVonCDsJ7qsqWdxm5xb2idLgha0vzxZ+WpcWg8nbZXN194cZ5GWyoQ3gHwBtz+kF4IYvwQhbhhSzCC1mEF7IIL2QRXsgivJBFeCGL8EIW4YUswgtZhBeyCC9kEV7IIryQRXghi/BCFuGFLMILWYQXsggvZBFeyPo/QKzmc+Darx8AAAAASUVORK5CYII=" /></p>
+<!-- rnb-plot-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBoaXN0KGZpbG1zJGJ1ZGdldClcbmBgYCJ9 -->
+<pre class="r"><code># hist(films$budget)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDJlKzA1XG4ifQ== -->
-<pre><code>[1] 2e+05</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><strong>Check for Outliers in the following:</strong> revenue<br> length<br> budget<br></p>
@@ -525,7 +520,7 @@ DIRECTOR SPECIFIC<br> director_age<br> director_number_of_films<br> max_director
 <pre class="r"><code>revenue.lm &lt;- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=films)
 summary(revenue.lm)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IHJldmVudWUgfiAuIC0gYXZnX2FjdG9yX2ZpbG1fdm90ZXMgLSBtYXhfYWN0b3JfZmlsbV9zdGFycyAtIFxuICAgIG1heF9kaXJlY3Rvcl9maWxtX3ZvdGVzIC0gYXZnX2RpcmVjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gbWF4X2RpcmVjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gXG4gICAgbWF4X2FjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gZGF5IC0gYXZnX2FjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gXG4gICAgYXZnX2RpcmVjdG9yX2ZpbG1fc3RhcnMgLSBtb250aCAtIGF2Z19hY3Rvcl9hZ2UsIGRhdGEgPSBmaWxtcylcblxuUmVzaWR1YWxzOlxuICAgICAgIE1pbiAgICAgICAgIDFRICAgICBNZWRpYW4gICAgICAgICAzUSAgICAgICAgTWF4IFxuLTkyOTk3NzQxMCAgLTMzNzcxNjk4ICAgLTk3MDg1ODcgICAxMTEwNDQyNSAyMjA5MDcxNjY4IFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVzdGltYXRlIFN0ZC4gRXJyb3IgdCB2YWx1ZSBQcig+fHR8KSAgICBcbihJbnRlcmNlcHQpICAgICAgICAgICAgICAgIC04Ljk5MGUrMDYgIDguNjc4ZSswNiAgLTEuMDM2IDAuMzAwMjgwICAgIFxubWF4X2FjdG9yX2ZpbG1fcmV2ZW51ZSAgICAgIDYuNzU0ZS0wMiAgOC41MzVlLTAzICAgNy45MTQgMi42OWUtMTUgKioqXG53ZWVrZGF5ICAgICAgICAgICAgICAgICAgICAtMS43MzFlKzA2ICA4LjYxNmUrMDUgIC0yLjAxMCAwLjA0NDQ5OSAqICBcbmF2Z19kaXJlY3Rvcl9maWxtX3JldmVudWUgICAyLjE4MWUtMDEgIDUuNDAwZS0wMiAgIDQuMDQwIDUuMzhlLTA1ICoqKlxuYXZnX2FjdG9yX2ZpbG1fcmV2ZW51ZSAgICAgIDIuMDA4ZS0wMSAgMi44NzNlLTAyICAgNi45OTEgMi44NmUtMTIgKioqXG5tYXhfZGlyZWN0b3JfZmlsbV9zdGFycyAgICAtMS40ODRlKzA2ICA0LjA3NmUrMDUgIC0zLjY0MiAwLjAwMDI3MiAqKipcbmF2Z19hY3Rvcl9maWxtX2FwcGVhcmFuY2VzIC0xLjMwMGUrMDYgIDIuODcwZSswNSAgLTQuNTI4IDYuMDFlLTA2ICoqKlxubWF4X2FjdG9yX2ZpbG1fYXBwZWFyYW5jZXMgIDEuMzg3ZSswNiAgMS4wMzllKzA1ICAxMy4zNDggIDwgMmUtMTYgKioqXG5hdmdfZGlyZWN0b3JfZmlsbV92b3RlcyAgICAgMS42MzJlKzAyICAxLjg5MGUrMDEgICA4LjYzNiAgPCAyZS0xNiAqKipcbmJ1ZGdldCAgICAgICAgICAgICAgICAgICAgICAxLjUxOGUtMDIgIDIuODA4ZS0wMyAgIDUuNDA1IDYuNTllLTA4ICoqKlxubWF4X2RpcmVjdG9yX2ZpbG1fcmV2ZW51ZSAgIDEuNTUzZS0wMSAgMi4xNDdlLTAyICAgNy4yMzUgNC45MWUtMTMgKioqXG5kaXJlY3Rvcl9hZ2UgICAgICAgICAgICAgICAtNi4zNDVlKzA1ICAxLjQwNmUrMDUgIC00LjUxMiA2LjQ4ZS0wNiAqKipcbm1heF9hY3Rvcl9maWxtX3ZvdGVzICAgICAgICAxLjI3M2UrMDEgIDYuMDM1ZSswMCAgIDIuMTEwIDAuMDM0ODk5ICogIFxubGVuZ3RoICAgICAgICAgICAgICAgICAgICAgIDQuNzIxZSswNSAgMy40NjRlKzA0ICAxMy42MjkgIDwgMmUtMTYgKioqXG5kaXJlY3Rvcl9udW1iZXJfb2ZfZmlsbXMgICAtMS41MzFlKzA2ICA0LjQ3NmUrMDUgIC0zLjQyMCAwLjAwMDYyOSAqKipcbmF2Z19hY3Rvcl9maWxtX3N0YXJzICAgICAgIC00LjI4NWUrMDYgIDQuODIxZSswNSAgLTguODg4ICA8IDJlLTE2ICoqKlxubXBhYV9udW0gICAgICAgICAgICAgICAgICAgIDcuMjQ2ZSswNiAgNS4yMzJlKzA1ICAxMy44NTEgIDwgMmUtMTYgKioqXG4tLS1cblNpZ25pZi4gY29kZXM6ICAwIOKAmCoqKuKAmSAwLjAwMSDigJgqKuKAmSAwLjAxIOKAmCrigJkgMC4wNSDigJgu4oCZIDAuMSDigJgg4oCZIDFcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDk3MTQwMDAwIG9uIDEzNjAxIGRlZ3JlZXMgb2YgZnJlZWRvbVxuTXVsdGlwbGUgUi1zcXVhcmVkOiAgMC4yNTA1LFx0QWRqdXN0ZWQgUi1zcXVhcmVkOiAgMC4yNDk2IFxuRi1zdGF0aXN0aWM6IDI4NC4xIG9uIDE2IGFuZCAxMzYwMSBERiwgIHAtdmFsdWU6IDwgMi4yZS0xNlxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IHJldmVudWUgfiAuIC0gYXZnX2FjdG9yX2ZpbG1fdm90ZXMgLSBtYXhfYWN0b3JfZmlsbV9zdGFycyAtIFxuICAgIG1heF9kaXJlY3Rvcl9maWxtX3ZvdGVzIC0gYXZnX2RpcmVjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gbWF4X2RpcmVjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gXG4gICAgbWF4X2FjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gZGF5IC0gYXZnX2FjdG9yX2ZpbG1fbWV0YXNjb3JlIC0gXG4gICAgYXZnX2RpcmVjdG9yX2ZpbG1fc3RhcnMgLSBtb250aCAtIGF2Z19hY3Rvcl9hZ2UsIGRhdGEgPSBmaWxtcylcblxuUmVzaWR1YWxzOlxuICAgICAgIE1pbiAgICAgICAgIDFRICAgICBNZWRpYW4gICAgICAgICAzUSAgICAgICAgTWF4IFxuLTkxNzQwOTExNiAgLTI3NTUwNjE1ICAgLTczNjEyMjcgICAxMDQyNTM5OSAyMTk3NTgyODE5IFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVzdGltYXRlIFN0ZC4gRXJyb3IgdCB2YWx1ZSBQcig+fHR8KSAgICBcbihJbnRlcmNlcHQpICAgICAgICAgICAgICAgIC0xLjQ4OGUrMDYgIDYuODI0ZSswNiAgLTAuMjE4IDAuODI3Mzk4ICAgIFxubWF4X2FjdG9yX2ZpbG1fcmV2ZW51ZSAgICAgIDIuOTYwZS0wMiAgNi4xOTllLTAzICAgNC43NzYgMS44MWUtMDYgKioqXG53ZWVrZGF5ICAgICAgICAgICAgICAgICAgICAtMS43OTFlKzA2ICA4LjA3MWUrMDUgIC0yLjIxOSAwLjAyNjUwNSAqICBcbmF2Z19kaXJlY3Rvcl9maWxtX3JldmVudWUgICAzLjc4N2UtMDEgIDMuMTQ4ZS0wMiAgMTIuMDMyICA8IDJlLTE2ICoqKlxuYXZnX2FjdG9yX2ZpbG1fcmV2ZW51ZSAgICAgIDIuMzE0ZS0wMSAgMi4zNzJlLTAyICAgOS43NTYgIDwgMmUtMTYgKioqXG5tYXhfZGlyZWN0b3JfZmlsbV9zdGFycyAgICAtMy40MDdlKzA1ICAzLjEwMWUrMDUgIC0xLjA5OCAwLjI3MjA0NCAgICBcbmF2Z19hY3Rvcl9maWxtX2FwcGVhcmFuY2VzIC0yLjMxN2UrMDYgIDMuMjExZSswNSAgLTcuMjE2IDUuNjJlLTEzICoqKlxubWF4X2FjdG9yX2ZpbG1fYXBwZWFyYW5jZXMgIDEuMjIzZSswNiAgOS41MjNlKzA0ICAxMi44NDQgIDwgMmUtMTYgKioqXG5hdmdfZGlyZWN0b3JfZmlsbV92b3RlcyAgICAgMS41NjZlKzAyICAxLjQzOWUrMDEgIDEwLjg4MiAgPCAyZS0xNiAqKipcbmJ1ZGdldCAgICAgICAgICAgICAgICAgICAgICAxLjI0NWUtMDIgIDIuNjMwZS0wMyAgIDQuNzM0IDIuMjJlLTA2ICoqKlxubWF4X2RpcmVjdG9yX2ZpbG1fcmV2ZW51ZSAgIDEuMzkxZS0wMSAgMS41NDVlLTAyICAgOS4wMDcgIDwgMmUtMTYgKioqXG5kaXJlY3Rvcl9hZ2UgICAgICAgICAgICAgICAtNi4xMzZlKzA1ICA5LjI3NmUrMDQgIC02LjYxNSAzLjg2ZS0xMSAqKipcbm1heF9hY3Rvcl9maWxtX3ZvdGVzICAgICAgICA1LjU5MmUrMDAgIDQuNTYyZSswMCAgIDEuMjI2IDAuMjIwMzcwICAgIFxubGVuZ3RoICAgICAgICAgICAgICAgICAgICAgIDMuOTE3ZSswNSAgMy4yODBlKzA0ICAxMS45NDIgIDwgMmUtMTYgKioqXG5kaXJlY3Rvcl9udW1iZXJfb2ZfZmlsbXMgICAtMS4zNzZlKzA2ICAzLjY1M2UrMDUgIC0zLjc2OCAwLjAwMDE2NiAqKipcbmF2Z19hY3Rvcl9maWxtX3N0YXJzICAgICAgIC0zLjI5N2UrMDYgIDUuMDg4ZSswNSAgLTYuNDgwIDkuNDZlLTExICoqKlxubXBhYV9udW0gICAgICAgICAgICAgICAgICAgIDUuMTc3ZSswNiAgNC44OTRlKzA1ICAxMC41NzggIDwgMmUtMTYgKioqXG4tLS1cblNpZ25pZi4gY29kZXM6ICAwIOKAmCoqKuKAmSAwLjAwMSDigJgqKuKAmSAwLjAxIOKAmCrigJkgMC4wNSDigJgu4oCZIDAuMSDigJgg4oCZIDFcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDkwOTUwMDAwIG9uIDEzNjAxIGRlZ3JlZXMgb2YgZnJlZWRvbVxuTXVsdGlwbGUgUi1zcXVhcmVkOiAgMC4zNDI5LFx0QWRqdXN0ZWQgUi1zcXVhcmVkOiAgMC4zNDIxIFxuRi1zdGF0aXN0aWM6IDQ0My41IG9uIDE2IGFuZCAxMzYwMSBERiwgIHAtdmFsdWU6IDwgMi4yZS0xNlxuIn0= -->
 <pre><code>
 Call:
 lm(formula = revenue ~ . - avg_actor_film_votes - max_actor_film_stars - 
@@ -535,33 +530,33 @@ lm(formula = revenue ~ . - avg_actor_film_votes - max_actor_film_stars -
 
 Residuals:
        Min         1Q     Median         3Q        Max 
--929977410  -33771698   -9708587   11104425 2209071668 
+-917409116  -27550615   -7361227   10425399 2197582819 
 
 Coefficients:
                              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)                -8.990e+06  8.678e+06  -1.036 0.300280    
-max_actor_film_revenue      6.754e-02  8.535e-03   7.914 2.69e-15 ***
-weekday                    -1.731e+06  8.616e+05  -2.010 0.044499 *  
-avg_director_film_revenue   2.181e-01  5.400e-02   4.040 5.38e-05 ***
-avg_actor_film_revenue      2.008e-01  2.873e-02   6.991 2.86e-12 ***
-max_director_film_stars    -1.484e+06  4.076e+05  -3.642 0.000272 ***
-avg_actor_film_appearances -1.300e+06  2.870e+05  -4.528 6.01e-06 ***
-max_actor_film_appearances  1.387e+06  1.039e+05  13.348  &lt; 2e-16 ***
-avg_director_film_votes     1.632e+02  1.890e+01   8.636  &lt; 2e-16 ***
-budget                      1.518e-02  2.808e-03   5.405 6.59e-08 ***
-max_director_film_revenue   1.553e-01  2.147e-02   7.235 4.91e-13 ***
-director_age               -6.345e+05  1.406e+05  -4.512 6.48e-06 ***
-max_actor_film_votes        1.273e+01  6.035e+00   2.110 0.034899 *  
-length                      4.721e+05  3.464e+04  13.629  &lt; 2e-16 ***
-director_number_of_films   -1.531e+06  4.476e+05  -3.420 0.000629 ***
-avg_actor_film_stars       -4.285e+06  4.821e+05  -8.888  &lt; 2e-16 ***
-mpaa_num                    7.246e+06  5.232e+05  13.851  &lt; 2e-16 ***
+(Intercept)                -1.488e+06  6.824e+06  -0.218 0.827398    
+max_actor_film_revenue      2.960e-02  6.199e-03   4.776 1.81e-06 ***
+weekday                    -1.791e+06  8.071e+05  -2.219 0.026505 *  
+avg_director_film_revenue   3.787e-01  3.148e-02  12.032  &lt; 2e-16 ***
+avg_actor_film_revenue      2.314e-01  2.372e-02   9.756  &lt; 2e-16 ***
+max_director_film_stars    -3.407e+05  3.101e+05  -1.098 0.272044    
+avg_actor_film_appearances -2.317e+06  3.211e+05  -7.216 5.62e-13 ***
+max_actor_film_appearances  1.223e+06  9.523e+04  12.844  &lt; 2e-16 ***
+avg_director_film_votes     1.566e+02  1.439e+01  10.882  &lt; 2e-16 ***
+budget                      1.245e-02  2.630e-03   4.734 2.22e-06 ***
+max_director_film_revenue   1.391e-01  1.545e-02   9.007  &lt; 2e-16 ***
+director_age               -6.136e+05  9.276e+04  -6.615 3.86e-11 ***
+max_actor_film_votes        5.592e+00  4.562e+00   1.226 0.220370    
+length                      3.917e+05  3.280e+04  11.942  &lt; 2e-16 ***
+director_number_of_films   -1.376e+06  3.653e+05  -3.768 0.000166 ***
+avg_actor_film_stars       -3.297e+06  5.088e+05  -6.480 9.46e-11 ***
+mpaa_num                    5.177e+06  4.894e+05  10.578  &lt; 2e-16 ***
 ---
 Signif. codes:  0 *** 0.001 ** 0.01 * 0.05 . 0.1   1
 
-Residual standard error: 97140000 on 13601 degrees of freedom
-Multiple R-squared:  0.2505,    Adjusted R-squared:  0.2496 
-F-statistic: 284.1 on 16 and 13601 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 90950000 on 13601 degrees of freedom
+Multiple R-squared:  0.3429,    Adjusted R-squared:  0.3421 
+F-statistic: 443.5 on 16 and 13601 DF,  p-value: &lt; 2.2e-16</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -606,14 +601,14 @@ avg.diff.50.50 &lt;- mean(abs(diffs.50.50))
 avg.diff.30.70 &lt;- mean(abs(diffs.30.70))
 print(avg.diff.50.50)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQ0NzI0NjQwXG4ifQ== -->
-<pre><code>[1] 44724640</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQxODI3ODcyXG4ifQ== -->
+<pre><code>[1] 41827872</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoYXZnLmRpZmYuMzAuNzApXG5gYGAifQ== -->
 <pre class="r"><code>print(avg.diff.30.70)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQ3NDcxMzUyXG4ifQ== -->
-<pre><code>[1] 47471352</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQyMjE0MjkzXG4ifQ== -->
+<pre><code>[1] 42214293</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
