@@ -45,9 +45,10 @@ metascore<br>
 num_votes<br>
 director<br>
 actors<br>
-release_date<br>
+release_date<br><br>
+<p>Changes made in model 2.0 so far. Filtering out lengths less than 90 minutes.</p>
 ```{r}
-films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false}", 0, 15000) 
+films <- dbGetQuery(mg1, 'films_agg', "{'FAILED': false, 'length': {'$gt': 90}}", 0, 15000) 
 films <- subset(films, select = -c(X_id, id, FAILED, mojo_id, mojo_title, stars, metascore, num_votes, director, actors, release_date))
 ```
 
@@ -106,20 +107,31 @@ adjusted_ages <- sapply(current_ages, function (a) if (a <= 0) {avg_abv_zero_age
 films$director_age <- adjusted_ages
 ```
 
-<strong>Display Pairs Panels</strong>
+<strong>Display Pairs Panels (needs to be fixed)</strong>
 ```{r}
 require(psych)
 pairs.panels(films)
 ```
 
-<strong>Histogram of Important Values</strong>
+<strong>Dividing this into three models: low, medium and high</strong><br><br>
+
+<strong>Low Budget 1 - 40 mil</strong>
 ```{r}
-# hist(films$revenue)
-# hist(films$budget)
+low.budget.max = 40000000
+low.budget.min = 1
+length(films$revenue[films$budget <= low.budget.max & films$budget > low.budget.min])
+boxplot(films$budget[films$budget <= low.budget.max & films$budget > low.budget.min])
+hist(films$revenue[films$budget <= low.budget.max & films$budget > low.budget.min])
+hist(sqrt(films$budget[films$budget <= low.budget.max & films$budget > low.budget.min]))
+low.budget.films <- subset(films, films$budget <= low.budget.max & films$budget > low.budget.min)
+
+# Transforming by taking the sqrt of budget
+low.budget.films$budget <- sqrt(low.budget.films$budget)
+hist(low.budget.films$budget)
 ```
 
 
-<strong>Check for Outliers in the following:</strong>
+<strong>Check Low Budget for Outliers in the following:</strong>
 revenue<br>
 length<br>
 budget<br>
@@ -127,36 +139,149 @@ budget<br>
 outliers.high<-function(f_data) {
   f_sd <- sd(f_data, na.rm = TRUE)
   f_avg <- mean(f_data, na.rm = TRUE)
-  return(f_data[f_data >= (f_avg + f_sd * 2)])
+  return(f_data[f_data >= (f_avg + f_sd * 2.5)])
 }
 
 outliers.low<-function(f_data) {
   f_sd <- sd(f_data, na.rm = TRUE)
   f_avg <- mean(f_data, na.rm = TRUE)
-  return(f_data[f_data <= (f_avg - f_sd * 2)])
+  return(f_data[f_data <= (f_avg - f_sd * 2.5)])
 }
 
 # Revenue
 print("Revenue")
 print("High")
-outliers.high(films$revenue)
+outliers.high(low.budget.films$revenue)
 print("Low")
-outliers.low(films$revenue)
+outliers.low(low.budget.films$revenue)
 
 # Length
 print("Length")
 print("High")
-outliers.high(films$length)
+outliers.high(low.budget.films$length)
 print("Low")
-outliers.low(films$length)
+outliers.low(low.budget.films$length)
 
 # Budget
 print("Budget")
 print("High")
-outliers.high(films$budget)
+outliers.high(low.budget.films$budget)
 print("Low")
-outliers.low(films$budget)
+outliers.low(low.budget.films$budget)
 ```
+
+
+
+<strong>Medium Budget 40mil - 120mil</strong>
+```{r}
+medium.budget.max = 120000000
+medium.budget.min = 40000000
+length(films$revenue[films$budget <= medium.budget.max & films$budget > medium.budget.min])
+boxplot(films$budget[films$budget <= medium.budget.max & films$budget > medium.budget.min])
+hist(films$revenue[films$budget <= medium.budget.max & films$budget > medium.budget.min])
+hist(sqrt(films$budget[films$budget <= medium.budget.max & films$budget > medium.budget.min]))
+medium.budget.films <- subset(films, films$budget <= medium.budget.max & films$budget > medium.budget.min)
+
+# Transforming by taking the sqrt of budget
+medium.budget.films$budget <- sqrt(medium.budget.films$budget)
+hist(medium.budget.films$budget)
+```
+
+
+<strong>Check Medium Budget for Outliers in the following:</strong>
+revenue<br>
+length<br>
+budget<br>
+```{r}
+outliers.high<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data >= (f_avg + f_sd * 2.5)])
+}
+
+outliers.low<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data <= (f_avg - f_sd * 2.5)])
+}
+
+# Revenue
+print("Revenue")
+print("High")
+outliers.high(medium.budget.films$revenue)
+print("Low")
+outliers.low(medium.budget.films$revenue)
+
+# Length
+print("Length")
+print("High")
+outliers.high(medium.budget.films$length)
+print("Low")
+outliers.low(medium.budget.films$length)
+
+# Budget
+print("Budget")
+print("High")
+outliers.high(medium.budget.films$budget)
+print("Low")
+outliers.low(medium.budget.films$budget)
+```
+
+
+<strong>High Budget 120mil - max</strong>
+```{r}
+high.budget.min = 120000000
+length(films$revenue[films$budget > high.budget.min])
+boxplot(films$budget[films$budget > high.budget.min])
+hist(films$revenue[films$budget > high.budget.min])
+hist(sqrt(films$budget[films$budget > high.budget.min]))
+high.budget.films <- subset(films, films$budget > high.budget.min)
+
+# Transforming by taking the sqrt of budget
+high.budget.films$budget <- sqrt(high.budget.films$budget)
+hist(high.budget.films$budget)
+```
+
+
+<strong>Check High Budget for Outliers in the following:</strong>
+revenue<br>
+length<br>
+budget<br>
+```{r}
+outliers.high<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data >= (f_avg + f_sd * 2.5)])
+}
+
+outliers.low<-function(f_data) {
+  f_sd <- sd(f_data, na.rm = TRUE)
+  f_avg <- mean(f_data, na.rm = TRUE)
+  return(f_data[f_data <= (f_avg - f_sd * 2.5)])
+}
+
+# Revenue
+print("Revenue")
+print("High")
+outliers.high(high.budget.films$revenue)
+print("Low")
+outliers.low(high.budget.films$revenue)
+
+# Length
+print("Length")
+print("High")
+outliers.high(high.budget.films$length)
+print("Low")
+outliers.low(high.budget.films$length)
+
+# Budget
+print("Budget")
+print("High")
+outliers.high(high.budget.films$budget)
+print("Low")
+outliers.low(high.budget.films$budget)
+```
+
 
 
 <strong>Possible fields to be included in the model. Going to use backwards fitting to design the model<br></strong>
@@ -199,27 +324,40 @@ avg_director_film_metascore<br>
 </p>
 
 ```{r}
-revenue.lm <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=films)
-summary(revenue.lm)
+low.budget.revenue.lm <- lm(revenue ~ .-month-max_actor_film_stars-day-max_director_film_metascore-avg_actor_film_metascore-avg_actor_film_stars-avg_director_film_votes-max_director_film_stars-max_actor_film_votes-weekday-max_actor_film_metascore-director_number_of_films-avg_actor_film_votes-max_director_film_revenue-avg_director_film_metascore-avg_director_film_stars-max_actor_film_revenue, low.budget.films)
+summary(low.budget.revenue.lm)
 
 ```
 
-<strong>Divide data into training and test</strong>
-<strong>Using a random 50/50 and 30/70 split</strong>
 ```{r}
-train.rows.50.50 <- sample(1:nrow(films), round(nrow(films) / 2), replace=F)
-train.50.50 <- films[train.rows.50.50,]
-test.50.50 <- films[-train.rows.50.50,]
+medium.budget.revenue.lm <- lm(revenue ~ .-max_director_film_metascore-avg_actor_age-max_actor_film_appearances-max_actor_film_stars-avg_director_film_metascore-avg_director_film_votes-avg_actor_film_appearances-max_actor_film_votes-max_director_film_revenue-avg_director_film_stars-max_director_film_stars-day-avg_actor_film_votes-max_director_film_votes-avg_actor_film_metascore-avg_actor_film_stars-month, medium.budget.films)
+summary(medium.budget.revenue.lm)
 
-train.rows.30.70 <- sample(1:nrow(films), round(nrow(films) / 3.33), replace=F)
-train.30.70 <- films[train.rows.30.70,]
-test.30.70 <- films[-train.rows.30.70,]
+```
+
+```{r}
+high.budget.revenue.lm <- lm(revenue ~ .-avg_actor_film_appearances-budget-avg_director_film_stars-max_actor_film_votes-max_actor_film_stars-avg_actor_film_stars-max_director_film_metascore-director_age-avg_actor_film_votes-weekday-max_actor_film_revenue-max_director_film_stars-day-avg_actor_film_metascore-max_actor_film_metascore-month, high.budget.films)
+summary(high.budget.revenue.lm)
+
+```
+
+<strong>Only doing this for my best model</strong>
+<strong>Divide data into training and test</strong><br>
+<strong>Using a random 50/50 and 30/70 split</strong><br>
+```{r}
+train.rows.50.50 <- sample(1:nrow(high.budget.films), round(nrow(high.budget.films) / 2), replace=F)
+train.50.50 <- high.budget.films[train.rows.50.50,]
+test.50.50 <- high.budget.films[-train.rows.50.50,]
+
+train.rows.30.70 <- sample(1:nrow(high.budget.films), round(nrow(high.budget.films) / 3.33), replace=F)
+train.30.70 <- high.budget.films[train.rows.30.70,]
+test.30.70 <- high.budget.films[-train.rows.30.70,]
 ```
 
 <strong>Building the two test models</strong>
 ```{r}
-lm.50.50 <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=train.50.50)
-lm.30.70 <- lm(revenue ~ .-avg_actor_film_votes-max_actor_film_stars-max_director_film_votes-avg_director_film_metascore-max_director_film_metascore-max_actor_film_metascore-day-avg_actor_film_metascore-avg_director_film_stars-month-avg_actor_age, data=train.30.70)
+lm.50.50 <- lm(revenue ~ .-avg_actor_film_appearances-budget-avg_director_film_stars-max_actor_film_votes-max_actor_film_stars-avg_actor_film_stars-max_director_film_metascore-director_age-avg_actor_film_votes-weekday-max_actor_film_revenue-max_director_film_stars-day-avg_actor_film_metascore-max_actor_film_metascore-month, data=train.50.50)
+lm.30.70 <- lm(revenue ~ .-avg_actor_film_appearances-budget-avg_director_film_stars-max_actor_film_votes-max_actor_film_stars-avg_actor_film_stars-max_director_film_metascore-director_age-avg_actor_film_votes-weekday-max_actor_film_revenue-max_director_film_stars-day-avg_actor_film_metascore-max_actor_film_metascore-month, data=train.30.70)
 ```
 
 <strong>Running the tests</strong>
