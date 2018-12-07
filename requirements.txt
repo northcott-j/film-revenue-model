@@ -1,3 +1,8 @@
+pandas
+numpy
+matplotlib
+sklearn
 requests
 bs4
 pymongo
+python-dotenv
